@@ -17,4 +17,6 @@ add_executable(
     src/main.cpp
 )
 
+target_include_directories(exchange_sim PRIVATE ${PROJECT_SOURCE_DIR}/include)
+
 target_compile_options(exchange_sim PRIVATE -Wall -Wextra -Wpedantic)
