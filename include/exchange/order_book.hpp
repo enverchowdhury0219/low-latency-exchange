@@ -24,8 +24,9 @@ public:
 private:
     using OrdersAtPrice = std::deque<Order>;
 
+    // third parameter here is the comparison function used to sort keys
     using BidLevels =
-        std::map<Price, OrdersAtPrice, std::greater<Price>>; // we want the highest bid
+        std::map<Price, OrdersAtPrice, std::greater<Price>>; // we want the highest bid 
 
     using AskLevels =
         std::map<Price, OrdersAtPrice, std::less<Price>>; // we want the lowest ask

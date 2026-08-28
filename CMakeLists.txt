@@ -15,6 +15,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable(
     exchange_sim
     src/main.cpp
+    src/order_book.cpp
 )
 
 target_include_directories(exchange_sim PRIVATE ${PROJECT_SOURCE_DIR}/include)
