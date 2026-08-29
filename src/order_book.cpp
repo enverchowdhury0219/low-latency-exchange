@@ -54,7 +54,7 @@ bool OrderBook::would_cross(const Order& order) const
         const auto ask = best_ask();
         //we use has_value as best ask/bid returns a std::optional so it could be empty
         return ask.has_value() && 
-            order.price <= *ask;
+            order.price >= *ask;
     }
 
     const auto bid = best_bid();
