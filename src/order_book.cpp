@@ -52,17 +52,34 @@ bool OrderBook::would_cross(const Order& order) const
     if (order.side == Side::Buy)
     {
         const auto ask = best_ask();
-        //we use has_value as best ask/bid returns a std::optional so it could be empty
+        
+        // we use has_value as best ask/bid returns a std::optional so it could be empty
         return ask.has_value() && 
             order.price >= *ask;
     }
 
+    // for a sell order
     const auto bid = best_bid();
     return bid.has_value() &&
         order.price <= *bid;
-
-    
 }
+
+    std::optional<Price>
+    OrderBook::execution_price(const Order& order) const
+    {
+        //checks if the spread is crossed
+        if (!would_cross(order))
+        {
+            return std::nullopt;
+        }
+
+        if (order.side == Side::Buy)
+        {
+            return best_ask();
+        }
+
+        return best_bid();
+    }
 
 }
 

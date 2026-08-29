@@ -21,6 +21,9 @@ public:
 
     [[nodiscard]] bool would_cross(const Order& order) const;
 
+    [[nodiscard]] std::optional<Price>
+    execution_price(const Order& order) const;
+
     [[nodiscard]] std::size_t bid_level_count() const;
     [[nodiscard]] std::size_t ask_level_count() const;
 

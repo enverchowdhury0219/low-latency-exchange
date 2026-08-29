@@ -106,6 +106,53 @@ int main()
         << book.would_cross(crossing_sell)
         << '\n';
 
+    exchange::Order buy_below_ask{
+    9,
+    10128,
+    100,
+    exchange::Side::Buy
+    };
+
+    exchange::Order buy_through_ask{
+    10,
+    10140,
+    100,
+    exchange::Side::Buy
+    };
+
+    exchange::Order sell_through_bid{
+    11,
+    10120,
+    100,
+    exchange::Side::Sell
+    };
+
+    const auto price1 = book.execution_price(buy_below_ask);
+    const auto price2 = book.execution_price(buy_through_ask);
+    const auto price3 = book.execution_price(sell_through_bid);
+
+    if (price1)
+    {
+        std::cout << "Buy @ 10128 executes at: "
+                << *price1 << '\n';
+    }
+    else
+    {
+        std::cout << "Buy @ 10128 does not execute\n";
+    }
+
+    if (price2)
+    {
+        std::cout << "Buy @ 10140 executes at: "
+                << *price2 << '\n';
+    }
+
+    if (price3)
+    {
+        std::cout << "Sell @ 10120 executes at: "
+                << *price3 << '\n';
+    }
+
     return 0;
 }
 
