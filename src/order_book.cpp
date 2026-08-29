@@ -1,4 +1,5 @@
 #include "exchange/order_book.hpp"
+#include <algorithm>
 
 namespace exchange
 {
@@ -80,6 +81,52 @@ bool OrderBook::would_cross(const Order& order) const
 
         return best_bid();
     }
+
+std::optional<Trade>
+OrderBook::execute_one(Order& incoming)
+{
+    if (!would_cross(incoming))
+    {
+        return std::nullopt;  // no trade occurs
+    }
+
+    if (incoming.side == Side::Buy){
+        auto ask_level = asks_.begin();
+
+        // implements the time part of price-time priority
+        auto& resting_order = ask_level -> second.front();
+
+        const Quantity traded_quantity =
+            std::min(incoming.quantity, resting_order.quantity);
+        
+        Trade trade{
+            incoming.id,
+            resting_order.id,
+            resting_order.price,
+            traded_quantity
+        };
+
+        incoming.quantity -= traded_quantity;
+        resting_order.quantity -= traded_quantity;
+
+        // removing a filled resting order
+        if (resting_order.quantity == 0)
+        {
+            // price-time priority, getting rid of the earliest order (deque front)
+            ask_level -> second.pop_front();
+
+            // if the price level is empty, then useless
+            if (ask_level->second.empty())
+            {
+                asks_.erase(ask_level);
+            }
+        }
+        return trade;
+
+    }
+    return std::nullopt;
+}
+
 
 }
 

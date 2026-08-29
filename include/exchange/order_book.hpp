@@ -7,6 +7,8 @@
 #include <optional>
 
 #include "exchange/order.hpp"
+#include "exchange/trade.hpp"
+
 
 namespace exchange
 {
@@ -27,6 +29,9 @@ public:
     [[nodiscard]] std::size_t bid_level_count() const;
     [[nodiscard]] std::size_t ask_level_count() const;
 
+    // we dont use const here as we plan on changing its remaining quantity
+    [[nodiscard]] std::optional<Trade>
+    execute_one(Order& incoming);
 
 private:
     using OrdersAtPrice = std::deque<Order>;
