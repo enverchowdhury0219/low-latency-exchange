@@ -47,4 +47,22 @@ std::size_t OrderBook::ask_level_count() const
     return asks_.size();
 }
 
+bool OrderBook::would_cross(const Order& order) const
+{
+    if (order.side == Side::Buy)
+    {
+        const auto ask = best_ask();
+        //we use has_value as best ask/bid returns a std::optional so it could be empty
+        return ask.has_value() && 
+            order.price <= *ask;
+    }
+
+    const auto bid = best_bid();
+    return bid.has_value() &&
+        order.price <= *bid;
+
+    
 }
+
+}
+

@@ -19,8 +19,12 @@ public:
     [[nodiscard]] std::optional<Price> best_bid() const;
     [[nodiscard]] std::optional<Price> best_ask() const;
 
+    [[nodiscard]] bool would_cross(const Order& order) const;
+
     [[nodiscard]] std::size_t bid_level_count() const;
     [[nodiscard]] std::size_t ask_level_count() const;
+
+
 private:
     using OrdersAtPrice = std::deque<Order>;
 

@@ -70,6 +70,42 @@ int main()
                   << " ticks\n";
     }
 
+    exchange::Order non_crossing_buy{
+    6,
+    10128,
+    100,
+    exchange::Side::Buy
+    };
+
+    // crossing as this buy price is higher than the selling price
+    exchange::Order crossing_buy{
+    7,
+    10130,
+    100,
+    exchange::Side::Buy
+    };
+
+    exchange::Order crossing_sell{
+    8,
+    10125,
+    100,
+    exchange::Side::Sell
+    };
+
+    std::cout << std::boolalpha;
+
+    std::cout << "Buy @ 10128 crosses: "
+        << book.would_cross(non_crossing_buy)
+        << '\n';
+
+    std::cout << "Buy @ 10130 crosses: "
+        << book.would_cross(crossing_buy)
+        << '\n';
+
+    std::cout << "Sell @ 10125 crosses: "
+        << book.would_cross(crossing_sell)
+        << '\n';
+
     return 0;
 }
 
