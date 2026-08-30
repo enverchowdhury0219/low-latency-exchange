@@ -5,180 +5,55 @@
 // added 3 buy orders but 2 bid price levels as 2 orders have same price
 int main()
 {
-    exchange::OrderBook book;
+    exchange::OrderBook sell_test_book;
 
-    // book.add_order({
-    //     1,
-    //     10125,
-    //     100,
-    //     exchange::Side::Buy
-    // });
-
-    // book.add_order({
-    //     2,
-    //     10120,
-    //     200,
-    //     exchange::Side::Buy
-    // });
-
-    book.add_order({
-        3,
-        10130,
+    sell_test_book.add_order({
+        100,
+        10125,
         150,
-        exchange::Side::Sell
+        exchange::Side::Buy
     });
 
-    book.add_order({
-        4,
-        10135,
-        75,
-        exchange::Side::Sell
+    sell_test_book.add_order({
+        101,
+        10120,
+        200,
+        exchange::Side::Buy
     });
 
-    // book.add_order({
-    //     5,
-    //     10125,
-    //     50,
-    //     exchange::Side::Buy
-    // });
+    exchange::Order aggressive_sell{
+        200,
+        10110,
+        100,
+        exchange::Side::Sell
+    };
 
-    const auto best_bid = book.best_bid();
-    const auto best_ask = book.best_ask();
+    const auto sell_trade =
+        sell_test_book.execute_one(aggressive_sell);
 
-    if (best_bid)
+    if (sell_trade)
     {
-        std::cout << "Best bid: " << *best_bid << '\n';
+        std::cout << "\nSell-side trade executed\n";
+        std::cout << "Buyer: "
+                << sell_trade->buy_order_id << '\n';
+
+        std::cout << "Seller: "
+                << sell_trade->sell_order_id << '\n';
+
+        std::cout << "Price: "
+                << sell_trade->price << '\n';
+
+        std::cout << "Quantity: "
+                << sell_trade->quantity << '\n';
     }
 
-    if (best_ask)
-    {
-        std::cout << "Best ask: " << *best_ask << '\n';
-    }
-
-    std::cout << "Bid levels: "
-              << book.bid_level_count()
-              << '\n';
-
-    std::cout << "Ask levels: "
-              << book.ask_level_count()
-              << '\n';
-
-    if (best_bid && best_ask)
-    {
-        std::cout << "Spread: "
-                  << (*best_ask - *best_bid)
-                  << " ticks\n";
-    }
-
-    // exchange::Order non_crossing_buy{
-    // 6,
-    // 10128,
-    // 100,
-    // exchange::Side::Buy
-    // };
-
-    // // crossing as this buy price is higher than the selling price
-    // exchange::Order crossing_buy{
-    // 7,
-    // 10130,
-    // 100,
-    // exchange::Side::Buy
-    // };
-
-    // exchange::Order crossing_sell{
-    // 8,
-    // 10125,
-    // 100,
-    // exchange::Side::Sell
-    // };
-
-    // std::cout << std::boolalpha;
-
-    // std::cout << "Buy @ 10128 crosses: "
-    //     << book.would_cross(non_crossing_buy)
-    //     << '\n';
-
-    // std::cout << "Buy @ 10130 crosses: "
-    //     << book.would_cross(crossing_buy)
-    //     << '\n';
-
-    // std::cout << "Sell @ 10125 crosses: "
-    //     << book.would_cross(crossing_sell)
-    //     << '\n';
-
-    // exchange::Order buy_below_ask{
-    // 9,
-    // 10128,
-    // 100,
-    // exchange::Side::Buy
-    // };
-
-    // exchange::Order buy_through_ask{
-    // 10,
-    // 10140,
-    // 100,
-    // exchange::Side::Buy
-    // };
-
-    // exchange::Order sell_through_bid{
-    // 11,
-    // 10120,
-    // 100,
-    // exchange::Side::Sell
-    // };
-
-    // const auto price1 = book.execution_price(buy_below_ask);
-    // const auto price2 = book.execution_price(buy_through_ask);
-    // const auto price3 = book.execution_price(sell_through_bid);
-
-    // if (price1)
-    // {
-    //     std::cout << "Buy @ 10128 executes at: "
-    //             << *price1 << '\n';
-    // }
-    // else
-    // {
-    //     std::cout << "Buy @ 10128 does not execute\n";
-    // }
-
-    // if (price2)
-    // {
-    //     std::cout << "Buy @ 10140 executes at: "
-    //             << *price2 << '\n';
-    // }
-
-    // if (price3)
-    // {
-    //     std::cout << "Sell @ 10120 executes at: "
-    //             << *price3 << '\n';
-    // }
-
-    exchange::Order aggressive_buy{
-    20,
-    10140,
-    100,
-    exchange::Side::Buy
-    };  
-
-    const auto trade = book.execute_one(aggressive_buy);
-
-    if (trade)
-    {
-        std::cout << "Trade executed\n";
-        std::cout << "Buyer: " << trade->buy_order_id << '\n';
-        std::cout << "Seller: " << trade->sell_order_id << '\n';
-        std::cout << "Price: " << trade->price << '\n';
-        std::cout << "Quantity: " << trade->quantity << '\n';
-    }
-
-    std::cout << "Incoming remaining quantity: "
-            << aggressive_buy.quantity
+    std::cout << "Incoming sell remaining: "
+            << aggressive_sell.quantity
             << '\n';
 
-    std::cout << "Best ask after trade: "
-            << *book.best_ask()
+    std::cout << "Best bid after trade: "
+            << *sell_test_book.best_bid()
             << '\n';
-
     return 0;
 }
 
