@@ -124,6 +124,8 @@ OrderBook::execute_one(Order& incoming)
         return trade;
 
     }
+    
+    // if the incoming order is a sell
     auto bid_level = bids_.begin();
 
     auto& resting_order = bid_level -> second.front();
