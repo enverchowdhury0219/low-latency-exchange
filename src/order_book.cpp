@@ -154,6 +154,27 @@ OrderBook::execute_one(Order& incoming)
     return trade;
 }
 
+// we dont use std::optional anymore as it can store at most one object
+std::vector<Trade>
+OrderBook::execute(Order& incoming)
+{
+    // initializing our trades array
+    std::vector<Trade> trades;
+
+    while(incoming.quantity > 0 
+        && would_cross(incoming))
+    {
+        const auto trade = execute_one(incoming);
+
+        if (!trade){
+            break;
+        }
+
+        trades.push_back(*trade);
+    }
+    return trades;
+}
+
 
 }
 

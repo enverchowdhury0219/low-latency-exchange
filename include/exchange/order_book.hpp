@@ -5,6 +5,7 @@
 #include <functional>
 #include <map>
 #include <optional>
+#include <vector>
 
 #include "exchange/order.hpp"
 #include "exchange/trade.hpp"
@@ -32,6 +33,10 @@ public:
     // we dont use const here as we plan on changing its remaining quantity
     [[nodiscard]] std::optional<Trade>
     execute_one(Order& incoming);
+
+    [[nodiscard]] std::vector<Trade>
+    execute(Order& order);
+
 
 private:
     using OrdersAtPrice = std::deque<Order>;
