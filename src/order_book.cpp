@@ -1,5 +1,5 @@
 #include "exchange/order_book.hpp"
-#include <algorithm>
+#include <algorithm> // for std::min
 
 namespace exchange
 {
@@ -124,7 +124,7 @@ OrderBook::execute_one(Order& incoming)
         return trade;
 
     }
-    
+
     // if the incoming order is a sell
     auto bid_level = bids_.begin();
 
