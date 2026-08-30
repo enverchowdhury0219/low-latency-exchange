@@ -65,24 +65,24 @@ bool OrderBook::would_cross(const Order& order) const
         order.price <= *bid;
 }
 
-    std::optional<Price>
-    OrderBook::execution_price(const Order& order) const
+std::optional<Price> // return type
+OrderBook::execution_price(const Order& order) const
+{
+    //checks if the spread is crossed
+    if (!would_cross(order))
     {
-        //checks if the spread is crossed
-        if (!would_cross(order))
-        {
-            return std::nullopt;
-        }
-
-        if (order.side == Side::Buy)
-        {
-            return best_ask();
-        }
-
-        return best_bid();
+        return std::nullopt;
     }
 
-std::optional<Trade>
+    if (order.side == Side::Buy)
+    {
+        return best_ask();
+    }
+
+    return best_bid();
+}
+
+std::optional<Trade> // return type
 OrderBook::execute_one(Order& incoming)
 {
     if (!would_cross(incoming))
@@ -124,7 +124,32 @@ OrderBook::execute_one(Order& incoming)
         return trade;
 
     }
-    return std::nullopt;
+    auto bid_level = bids_.begin();
+
+    auto& resting_order = bid_level -> second.front();
+
+    const Quantity traded_quantity =
+        std::min(incoming.quantity, resting_order.quantity);
+
+    Trade trade{
+        resting_order.id,
+        incoming.id,
+        resting_order.price,
+        traded_quantity
+    };
+
+    incoming.quantity -= traded_quantity;
+    resting_order.quantity -= traded_quantity;
+
+    if (resting_order.quantity == 0){
+        bid_level -> second.pop_front();
+
+        if (bid_level -> second.empty()){
+            bids_.erase(bid_level);
+        }
+    }
+
+    return trade;
 }
 
 
