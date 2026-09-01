@@ -18,27 +18,19 @@ namespace exchange
 class OrderBook
 {
 public:
-    void add_order(const Order& order);
+    [[nodiscard]] std::vector<Trade>
+    submit(Order incoming); // we accept the order by value here, so this function gets own copy to mutate
+
     [[nodiscard]] std::optional<Price> best_bid() const;
     [[nodiscard]] std::optional<Price> best_ask() const;
+
+    [[nodiscard]] std::size_t bid_level_count() const;
+    [[nodiscard]] std::size_t ask_level_count() const;
 
     [[nodiscard]] bool would_cross(const Order& order) const;
 
     [[nodiscard]] std::optional<Price>
     execution_price(const Order& order) const;
-
-    [[nodiscard]] std::size_t bid_level_count() const;
-    [[nodiscard]] std::size_t ask_level_count() const;
-
-    // we dont use const here as we plan on changing its remaining quantity
-    [[nodiscard]] std::optional<Trade>
-    execute_one(Order& incoming);
-
-    [[nodiscard]] std::vector<Trade>
-    execute(Order& order);
-
-    [[nodiscard]] std::vector<Trade>
-    submit(Order incoming); // we accept the order by value here, so this function gets own copy to mutate
 
 
 private:
@@ -51,6 +43,15 @@ private:
     using AskLevels =
         std::map<Price, OrdersAtPrice, std::less<Price>>; // we want the lowest ask
 
+    void add_order(const Order& order);
+   
+    // we dont use const here as we plan on changing its remaining quantity
+    [[nodiscard]] std::optional<Trade>
+    execute_one(Order& incoming);
+
+    [[nodiscard]] std::vector<Trade>
+    execute(Order& order);
+        
     BidLevels bids_;
     AskLevels asks_;
 };

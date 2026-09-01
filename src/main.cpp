@@ -7,21 +7,23 @@ int main()
 {
     exchange::OrderBook remainder_book;
 
-    remainder_book.add_order({
+    // since these are setup fill orders, we know no trade will occur so we choose to ignore submits value
+    (void)remainder_book.submit({
         1,
         10130,
         50,
         exchange::Side::Sell
     });
 
-    remainder_book.add_order({
+
+    (void)remainder_book.submit({
         2,
         10135,
         75,
         exchange::Side::Sell
     });
 
-    remainder_book.add_order({
+    (void)remainder_book.submit({
         3,
         10145,
         100,
@@ -35,8 +37,7 @@ int main()
     exchange::Side::Buy
     };
 
-    const auto remainder_trades =
-    remainder_book.submit(incoming_buy);
+    const auto remainder_trades = remainder_book.submit(incoming_buy);
 
     std::cout << "\nRemainder test\n";
 

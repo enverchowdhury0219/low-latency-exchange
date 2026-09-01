@@ -178,6 +178,7 @@ OrderBook::execute(Order& incoming)
 std::vector<Trade>
 OrderBook::submit(Order incoming)
 {
+    // fully executes the trades till its either all done or the order is passive
     auto trades = execute(incoming);
 
     if (incoming.quantity > 0){
