@@ -175,6 +175,23 @@ OrderBook::execute(Order& incoming)
     return trades;
 }
 
+std::vector<Trade>
+OrderBook::submit(Order incoming)
+{
+    auto trades = execute(incoming);
+
+    if (incoming.quantity > 0){
+        add_order(incoming);
+    }
+
+    return trades;
+}
+
+
+
+
+
+
 
 }
 
