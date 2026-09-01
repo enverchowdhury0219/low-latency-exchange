@@ -37,6 +37,9 @@ public:
     [[nodiscard]] std::vector<Trade>
     execute(Order& order);
 
+    [[nodiscard]] std::vector<Trade>
+    submit(Order incoming); // we accept the order by value here, so this function gets own copy to mutate
+
 
 private:
     using OrdersAtPrice = std::deque<Order>;
