@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 
 #include "exchange/order_book.hpp"
 
@@ -30,40 +31,39 @@ int main()
         exchange::Side::Sell
     });
 
-    exchange::Order incoming_buy{
-    20,
-    10140,
-    200,
-    exchange::Side::Buy
-    };
-
-    const auto remainder_trades = remainder_book.submit(incoming_buy);
-
-    std::cout << "\nRemainder test\n";
-
-    for (const auto& trade : remainder_trades)
+    try
     {
-        std::cout
-            << "Trade: "
-            << trade.quantity
-            << " @ "
-            << trade.price
-            << '\n';
+        (void)remainder_book.submit({
+            0,
+            10150,
+            100,
+            exchange::Side::Buy
+        });
     }
-
-    if (const auto bid = remainder_book.best_bid())
+    catch (const std::invalid_argument& error)
     {
-        std::cout << "Best bid after submission: "
-                << *bid
+        std::cout << "Rejected order: "
+                << error.what()
                 << '\n';
     }
 
-    if (const auto ask = remainder_book.best_ask())
+    try
     {
-        std::cout << "Best ask after submission: "
-                << *ask
+        (void)remainder_book.submit({
+            99,
+            10150,
+            0,
+            exchange::Side::Buy
+        });
+    }
+    catch (const std::invalid_argument& error)
+    {
+        std::cout << "Rejected order: "
+                << error.what()
                 << '\n';
     }
+
+
 
 }
 
