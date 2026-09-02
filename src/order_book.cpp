@@ -1,5 +1,6 @@
 #include "exchange/order_book.hpp"
 #include <algorithm> // for std::min
+#include <stdexcept>
 
 namespace exchange
 {
@@ -178,6 +179,9 @@ OrderBook::execute(Order& incoming)
 std::vector<Trade>
 OrderBook::submit(Order incoming)
 {
+    // making sure our order id and quantity are both non-zero
+    validate_order(incoming);
+    
     // fully executes the trades till its either all done or the order is passive
     auto trades = execute(incoming);
 
@@ -188,8 +192,22 @@ OrderBook::submit(Order incoming)
     return trades;
 }
 
+void OrderBook::validate_order(Order& order) const
+{
+    if (order.id == 0){
+        throw std::invalid_argument(
+            "Order ID must be non-zero"
+        );
+    }
 
+    if (order.quantity == 0)
+    {
+        throw std::invalid_argument(
+            "Order quantity must be non-zero"
+        );
+    }
 
+}
 
 
 

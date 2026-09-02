@@ -43,6 +43,8 @@ private:
     using AskLevels =
         std::map<Price, OrdersAtPrice, std::less<Price>>; // we want the lowest ask
 
+    void validate_order(const Order& order) const;
+    
     void add_order(const Order& order);
    
     // we dont use const here as we plan on changing its remaining quantity
