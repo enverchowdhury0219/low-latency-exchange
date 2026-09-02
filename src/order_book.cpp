@@ -1,6 +1,6 @@
 #include "exchange/order_book.hpp"
 #include <algorithm> // for std::min
-#include <stdexcept>
+#include <stdexcept> // for throwing exceptions
 
 namespace exchange
 {
@@ -192,7 +192,7 @@ OrderBook::submit(Order incoming)
     return trades;
 }
 
-void OrderBook::validate_order(Order& order) const
+void OrderBook::validate_order(const Order& order) const
 {
     if (order.id == 0){
         throw std::invalid_argument(
@@ -208,9 +208,6 @@ void OrderBook::validate_order(Order& order) const
     }
 
 }
-
-
-
 
 }
 
