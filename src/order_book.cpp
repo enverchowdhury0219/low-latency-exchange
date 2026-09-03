@@ -116,6 +116,7 @@ OrderBook::execute_one(Order& incoming)
         // removing a filled resting order
         if (resting_order.quantity == 0)
         {
+            // we do this first as .pop() would remove that order object whose id we need to delete
             live_order_ids_.erase(resting_order.id);
             
             // price-time priority, getting rid of the earliest order (deque front)
@@ -150,6 +151,9 @@ OrderBook::execute_one(Order& incoming)
     resting_order.quantity -= traded_quantity;
 
     if (resting_order.quantity == 0){
+        
+        live_order_ids_.erase(resting_order.id);
+        
         bid_level -> second.pop_front();
 
         if (bid_level -> second.empty()){
