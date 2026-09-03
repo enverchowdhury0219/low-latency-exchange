@@ -15,6 +15,9 @@ void OrderBook::add_order(const Order& order)
     {
         asks_[order.price].push_back(order);
     }
+
+    // to make sure new order exists in set of order ids
+    live_order_ids_.insert(order.id);
 }
 
 // we use optional here to prevent using 0 as a null value
@@ -113,6 +116,8 @@ OrderBook::execute_one(Order& incoming)
         // removing a filled resting order
         if (resting_order.quantity == 0)
         {
+            live_order_ids_.erase(resting_order.id);
+            
             // price-time priority, getting rid of the earliest order (deque front)
             ask_level -> second.pop_front();
 
@@ -204,6 +209,13 @@ void OrderBook::validate_order(const Order& order) const
     {
         throw std::invalid_argument(
             "Order quantity must be non-zero"
+        );
+    }
+
+    if (live_order_ids_.find(order.id) != live_order_ids_.end())
+    {
+        throw std::invalid_argument(
+            "Order ID is already live"
         );
     }
 
