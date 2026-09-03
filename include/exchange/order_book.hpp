@@ -6,6 +6,7 @@
 #include <map>
 #include <optional>
 #include <vector>
+#include <unordered_set>
 
 #include "exchange/order.hpp"
 #include "exchange/trade.hpp"
@@ -55,6 +56,8 @@ private:
     [[nodiscard]] std::vector<Trade>
     execute(Order& order);
         
+    std::unordered_set<OrderId> live_order_ids_; // to keep track of our orders, has a fast membership registry as it uses hash table
+
     BidLevels bids_;
     AskLevels asks_;
 };
