@@ -32,7 +32,7 @@ int main()
         });
 
         std::cout << "Order ID 50 successfully reused\n";
-        std::cout << "Order ID traded: " << fill_trades.OrderId << ".";
+    
     }
     catch (const std::invalid_argument& error)
     {
