@@ -6,63 +6,32 @@
 // added 3 buy orders but 2 bid price levels as 2 orders have same price
 int main()
 {
-    exchange::OrderBook remainder_book;
+    exchange::OrderBook duplicate_test;
 
-    // since these are setup fill orders, we know no trade will occur so we choose to ignore submits value
-    (void)remainder_book.submit({
-        1,
-        10130,
-        50,
-        exchange::Side::Sell
-    });
-
-
-    (void)remainder_book.submit({
-        2,
-        10135,
-        75,
-        exchange::Side::Sell
-    });
-
-    (void)remainder_book.submit({
-        3,
-        10145,
+    (void)duplicate_test.submit({
+        42,
+        10120,
         100,
-        exchange::Side::Sell
+        exchange::Side::Buy
     });
 
     try
     {
-        (void)remainder_book.submit({
-            0,
-            10150,
-            100,
+        (void)duplicate_test.submit({
+            42,
+            10110,
+            50,
             exchange::Side::Buy
         });
     }
     catch (const std::invalid_argument& error)
     {
-        std::cout << "Rejected order: "
+        std::cout << "Rejected duplicate: "
                 << error.what()
                 << '\n';
     }
 
-    try
-    {
-        (void)remainder_book.submit({
-            99,
-            10150,
-            0,
-            exchange::Side::Buy
-        });
-    }
-    catch (const std::invalid_argument& error)
-    {
-        std::cout << "Rejected order: "
-                << error.what()
-                << '\n';
-    }
-
+    
 
 
 }
