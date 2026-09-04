@@ -262,6 +262,7 @@ bool OrderBook::cancel(OrderId id)
         }
     }
 
+    // ++x is the same as x++ in a for loop
     for (auto level = asks_.begin(); level != asks_.end(); ++level)
     {
         auto& orders = level -> second;
@@ -280,7 +281,7 @@ bool OrderBook::cancel(OrderId id)
             orders.erase(order);
             live_order_ids_.erase(id);
 
-            if (orders.empty())
+            if (orders.empty()) // no more orders at that price
             {
                 asks_.erase(level);
             }

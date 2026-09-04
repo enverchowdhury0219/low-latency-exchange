@@ -6,42 +6,44 @@
 // added 3 buy orders but 2 bid price levels as 2 orders have same price
 int main()
 {
-    exchange::OrderBook reuse_test;
 
-    (void)reuse_test.submit({
-        50,
-        10130,
-        100,
-        exchange::Side::Sell
-    });
+    exchange::OrderBook cancel_book;
 
-    const auto fill_trades = reuse_test.submit({
-        51,
-        10130,
+    (void)cancel_book.submit({
+        10,
+        10125,
         100,
         exchange::Side::Buy
     });
 
-    try
-    {
-        (void)reuse_test.submit({
-            50,
-            10140,
-            100,
-            exchange::Side::Sell
-        });
+    (void)cancel_book.submit({
+        11,
+        10120,
+        50,
+        exchange::Side::Buy
 
-        std::cout << "Order ID 50 successfully reused\n";
-    
-    }
-    catch (const std::invalid_argument& error)
-    {
-        std::cout << error.what() << '\n';
-    }
+    });
+
+    std::cout << "Best bid before cancel: "
+          << *cancel_book.best_bid()
+          << '\n';
     
 
+    const bool cancelled = cancel_book.cancel(10);
+
+    std::cout << "Cancelled #10: "
+            << std::boolalpha
+            << cancelled
+            << '\n';
+
+    std::cout << "Best bid after cancel: "
+            << *cancel_book.best_bid()
+            << '\n';
 
 
+    std::cout << "Cancel #999: "
+          << cancel_book.cancel(999)
+          << '\n';
 
 }
 
