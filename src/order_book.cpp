@@ -233,6 +233,35 @@ bool OrderBook::cancel(OrderId id)
         return false;
     }
 
+    for (auto level = bids_.begin(); level != bids_.end(); ++level)
+    {
+        auto& orders = level -> second; // orders at that price level
+
+        const auto order = std::find_if(
+            orders.begin(),
+            orders.end(),
+            [id](const Order& current)
+            {
+                return current.id == id;
+            }
+        );
+
+        if (order != orders.end()) // we found the order
+        {
+            orders.erase(order);
+            live_order_ids_.erase(id);
+
+            if (orders.empty())
+            {
+                bids_.erase(level);
+            }
+
+            return true;
+        }
+    }
+
+
+
 }
 
 
