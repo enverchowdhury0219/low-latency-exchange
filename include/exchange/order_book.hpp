@@ -33,7 +33,7 @@ public:
     [[nodiscard]] std::optional<Price>
     execution_price(const Order& order) const;
 
-    [[nodiscard]] bool cancel(OrderId order); // T - order existed and canclled, F - no live order with that ID
+    [[nodiscard]] bool cancel(OrderId id); // T - order existed and canclled, F - no live order with that ID
 
 
 private:

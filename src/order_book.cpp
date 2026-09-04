@@ -2,6 +2,7 @@
 #include <algorithm> // for std::min
 #include <stdexcept> // for throwing exceptions
 
+
 namespace exchange
 {
 
@@ -224,6 +225,17 @@ void OrderBook::validate_order(const Order& order) const
     }
 
 }
+
+bool OrderBook::cancel(OrderId id)
+{
+    if (live_order_ids_.find(id) == live_order_ids_.end())
+    {
+        return false;
+    }
+
+}
+
+
 
 }
 
