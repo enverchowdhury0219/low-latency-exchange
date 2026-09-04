@@ -230,16 +230,18 @@ bool OrderBook::cancel(OrderId id)
 {
     if (live_order_ids_.find(id) == live_order_ids_.end())
     {
-        return false;
+        return false; // it is not in the book
     }
 
     for (auto level = bids_.begin(); level != bids_.end(); ++level)
     {
         auto& orders = level -> second; // orders at that price level
 
+        // std::if - search from beginning to end until some condition true
         const auto order = std::find_if(
             orders.begin(),
             orders.end(),
+            // our lambda - temp function
             [id](const Order& current)
             {
                 return current.id == id;
@@ -256,11 +258,39 @@ bool OrderBook::cancel(OrderId id)
                 bids_.erase(level);
             }
 
-            return true;
+            return true; // order found and removed
         }
     }
 
+    for (auto level = asks_.begin(); level != asks_.end(); ++level)
+    {
+        auto& orders = level -> second;
 
+        const auto order = std::find_if(
+            orders.begin(),
+            orders.end(),
+            [id](const Order& current)
+            {
+                return current.id == id;
+            }
+        );
+
+        if (order != orders.end())
+        {
+            orders.erase(order);
+            live_order_ids_.erase(id);
+
+            if (orders.empty())
+            {
+                asks_.erase(level);
+            }
+
+            return true; // order found and removed
+        }
+
+    }
+
+    return false;
 
 }
 
