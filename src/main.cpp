@@ -11,21 +11,21 @@ int main()
 
     (void)cancel_book.submit({
         10,
-        10120,
+        10125,
         100,
-        exchange::Side::Sell
+        exchange::Side::Buy
     });
 
     (void)cancel_book.submit({
         11,
-        10125,
+        10120,
         50,
-        exchange::Side::Sell
+        exchange::Side::Buy
 
     });
 
     std::cout << "Best bid before cancel: "
-          << *cancel_book.best_ask()
+          << *cancel_book.best_bid()
           << '\n';
     
 
@@ -37,7 +37,7 @@ int main()
             << '\n';
 
     std::cout << "Best bid after cancel: "
-            << *cancel_book.best_ask()
+            << *cancel_book.best_bid()
             << '\n';
 
 
