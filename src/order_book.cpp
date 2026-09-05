@@ -17,8 +17,11 @@ void OrderBook::add_order(const Order& order)
         asks_[order.price].push_back(order);
     }
 
-    // to make sure new order exists in set of order ids
-    live_order_ids_.insert(order.id);
+    // this is so when an order rests we know where it lives
+    order_locations_.insert({
+        order.id,
+        {order.side, order.price}
+    });
 }
 
 // we use optional here to prevent using 0 as a null value
@@ -118,7 +121,7 @@ OrderBook::execute_one(Order& incoming)
         if (resting_order.quantity == 0)
         {
             // we do this first as .pop() would remove that order object whose id we need to delete
-            live_order_ids_.erase(resting_order.id);
+            order_locations_.erase(resting_order.id);
             
             // price-time priority, getting rid of the earliest order (deque front)
             ask_level -> second.pop_front();
@@ -153,7 +156,7 @@ OrderBook::execute_one(Order& incoming)
 
     if (resting_order.quantity == 0){
         
-        live_order_ids_.erase(resting_order.id);
+        order_locations_.erase(resting_order.id);
         
         bid_level -> second.pop_front();
 
@@ -217,7 +220,7 @@ void OrderBook::validate_order(const Order& order) const
         );
     }
 
-    if (live_order_ids_.find(order.id) != live_order_ids_.end())
+    if (order_locations_.find(order.id) != order_locations_.end())
     {
         throw std::invalid_argument(
             "Order ID is already live"
@@ -228,7 +231,7 @@ void OrderBook::validate_order(const Order& order) const
 
 bool OrderBook::cancel(OrderId id)
 {
-    if (live_order_ids_.find(id) == live_order_ids_.end())
+    if (order_locations_.find(id) == order_locations_.end())
     {
         return false; // it is not in the book
     }
@@ -251,7 +254,7 @@ bool OrderBook::cancel(OrderId id)
         if (order != orders.end()) // we found the order
         {
             orders.erase(order);
-            live_order_ids_.erase(id);
+            order_locations_.erase(id);
 
             if (orders.empty())
             {
@@ -279,7 +282,7 @@ bool OrderBook::cancel(OrderId id)
         if (order != orders.end())
         {
             orders.erase(order);
-            live_order_ids_.erase(id);
+            order_locations_.erase(id);
 
             if (orders.empty()) // no more orders at that price
             {
