@@ -231,43 +231,25 @@ void OrderBook::validate_order(const Order& order) const
 
 bool OrderBook::cancel(OrderId id)
 {
-    if (order_locations_.find(id) == order_locations_.end())
+
+    const auto location_it = order_locations_.find(id);
+
+    if (location_it == order_locations_.end())
     {
         return false; // it is not in the book
     }
 
-    for (auto level = bids_.begin(); level != bids_.end(); ++level)
+    const OrderLocation location = location_it -> second;
+
+    if (location.side == Side::Buy)
     {
-        auto& orders = level -> second; // orders at that price level
+        auto level = bids_.find(location.price);
 
-        // std::if - search from beginning to end until some condition true
-        const auto order = std::find_if(
-            orders.begin(),
-            orders.end(),
-            // our lambda - temp function
-            [id](const Order& current)
-            {
-                return current.id == id;
-            }
-        );
-
-        if (order != orders.end()) // we found the order
+        if (level == bids_.end())
         {
-            orders.erase(order);
-            order_locations_.erase(id);
-
-            if (orders.empty())
-            {
-                bids_.erase(level);
-            }
-
-            return true; // order found and removed
+            return false; // not in the book so cant cancel
         }
-    }
 
-    // ++x is the same as x++ in a for loop
-    for (auto level = asks_.begin(); level != asks_.end(); ++level)
-    {
         auto& orders = level -> second;
 
         const auto order = std::find_if(
@@ -279,23 +261,23 @@ bool OrderBook::cancel(OrderId id)
             }
         );
 
-        if (order != orders.end())
+        if (order == orders.end())
         {
-            orders.erase(order);
-            order_locations_.erase(id);
-
-            if (orders.empty()) // no more orders at that price
-            {
-                asks_.erase(level);
-            }
-
-            return true; // order found and removed
+            return false;
         }
 
+        orders.erase(order);
+        order_locations_.erase(id);
+
+        if (orders.empty())
+        {
+            bids_.erase(level);
+        }
+
+        return true;
     }
 
-    return false;
-
+   
 }
 
 
