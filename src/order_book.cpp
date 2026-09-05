@@ -263,7 +263,7 @@ bool OrderBook::cancel(OrderId id)
 
         if (order == orders.end())
         {
-            return false;
+            return false; // that order doesnt exist in the price level
         }
 
         orders.erase(order);
@@ -277,7 +277,39 @@ bool OrderBook::cancel(OrderId id)
         return true;
     }
 
-   
+    auto level = asks_.find(location.price);
+
+    if (level == asks_.end())
+    {
+        return false;
+    }
+    
+    auto& orders = level -> second;
+
+    const auto order = std::find_if(
+        orders.begin(),
+        orders.end(),
+        [id](const Order& current)
+        {
+            return current.id == id;
+        }
+    );
+
+    if (order == orders.end())
+    {
+        return false;
+    }
+
+    orders.erase(order);
+    order_locations_.erase(id);
+
+    if (orders.empty())
+    {
+        asks_.erase(level);
+    }
+
+    return true;
+    
 }
 
 
