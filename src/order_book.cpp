@@ -302,7 +302,7 @@ bool OrderBook::cancel(OrderId id)
         asks_.erase(level);
     }
 
-    return true;   
+    return true;
     
 }
 
