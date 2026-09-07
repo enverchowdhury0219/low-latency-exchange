@@ -10,18 +10,26 @@ void OrderBook::add_order(const Order& order)
 {
     if (order.side == Side::Buy)
     {
-        bids_[order.price].push_back(order); // adding a new order to back of that price's queue
-    }
-    else
-    {
-        asks_[order.price].push_back(order);
-    }
+        auto& orders = bids_[order.price];
 
-    // this is so when an order rests we know where it lives
-    order_locations_.insert({
-        order.id,
-        {order.side, order.price}
-    });
+        auto order_it = orders.insert(
+            orders.end(),
+            order
+        );
+
+        order_locations_.insert({
+            order.id,
+            {
+                order.side,
+                order.price,
+                order_it
+            }
+        });
+
+        return;
+    }
+    
+    auto& orders = a
 }
 
 // we use optional here to prevent using 0 as a null value
