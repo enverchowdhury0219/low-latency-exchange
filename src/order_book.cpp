@@ -17,6 +17,8 @@ void OrderBook::add_order(const Order& order)
             order
         );
 
+        // inserts order at the end - preserves time priority
+        // also returns interator pointing to inserted order
         order_locations_.insert({
             order.id,
             {
@@ -273,26 +275,10 @@ bool OrderBook::cancel(OrderId id)
             return false; // not in the book so cant cancel
         }
 
-        auto& orders = level -> second;
+        level -> second.erase(location.order);
+        order_locations_.erase(location_it);
 
-        const auto order = std::find_if(
-            orders.begin(),
-            orders.end(),
-            [id](const Order& current)
-            {
-                return current.id == id;
-            }
-        );
-
-        if (order == orders.end())
-        {
-            return false; // that order doesnt exist in the price level
-        }
-
-        orders.erase(order);
-        order_locations_.erase(id);
-
-        if (orders.empty())
+        if (level -> second.empty())
         {
             bids_.erase(level);
         }
@@ -300,38 +286,23 @@ bool OrderBook::cancel(OrderId id)
         return true;
     }
 
-    auto level = asks_.find(location.price);
 
+    auto level = asks_.find(location.price);
+    
     if (level == asks_.end())
     {
         return false;
     }
     
-    auto& orders = level -> second;
+    level -> second.erase(location.order);
+    order_locations_.erase(location_it);
 
-    const auto order = std::find_if(
-        orders.begin(),
-        orders.end(),
-        [id](const Order& current)
-        {
-            return current.id == id;
-        }
-    );
-
-    if (order == orders.end())
-    {
-        return false;
-    }
-
-    orders.erase(order);
-    order_locations_.erase(id);
-
-    if (orders.empty())
+    if (level -> second.empty())
     {
         asks_.erase(level);
     }
 
-    return true;
+    return true;   
     
 }
 
