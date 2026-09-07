@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstddef>
-#include <deque>
+#include <list>
 #include <functional>
 #include <map>
 #include <optional>
@@ -37,7 +37,7 @@ public:
 
 
 private:
-    using OrdersAtPrice = std::deque<Order>;
+    using OrdersAtPrice = std::list<Order>;
 
     // third parameter here is the comparison function used to sort keys
     using BidLevels =
@@ -62,6 +62,7 @@ private:
     {
         Side side;
         Price price;
+        OrdersAtPrice::iterator order;
     };
 
     // key = order id, value = side, price e.g. Buy, 10125
