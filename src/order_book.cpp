@@ -29,7 +29,22 @@ void OrderBook::add_order(const Order& order)
         return;
     }
     
-    auto& orders = a
+    auto& orders = asks_[order.price];
+
+    auto order_it = orders.insert(
+        orders.end(),
+        order
+    );
+
+    order_locations_.insert({
+            order.id,
+            {
+                order.side,
+                order.price,
+                order_it
+            }
+        });
+    
 }
 
 // we use optional here to prevent using 0 as a null value
