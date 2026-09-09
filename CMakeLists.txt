@@ -12,12 +12,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_executable(
-    exchange_sim
-    src/main.cpp
-    src/order_book.cpp
-)
-
 add_library(
     exchange_core
     src/order_book.cpp
@@ -25,15 +19,33 @@ add_library(
 
 target_include_directories(
     exchange_core
-    PUIBLIC
+    PUBLIC
         ${PROJECT_SOURCE_DIR}/include
 )
 
 target_compile_options(
-    exchang_core
+    exchange_core
     PRIVATE
         -Wall
         -Wextra
         -Wpedantic
 )
 
+add_executable(
+    exchange_sim
+    src/main.cpp
+)
+
+target_link_libraries(
+    exchange_sim
+    PRIVATE
+        exchange_core
+)
+
+target_compile_options(
+    exchange_sim
+    PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
+)
