@@ -18,12 +18,22 @@ add_executable(
     src/order_book.cpp
 )
 
-target_include_directories(exchange_sim PRIVATE ${PROJECT_SOURCE_DIR}/include)
-
-target_compile_options(exchange_sim PRIVATE -Wall -Wextra -Wpedantic)
-
 add_library(
     exchange_core
     src/order_book.cpp
+)
+
+target_include_directories(
+    exchange_core
+    PUIBLIC
+        ${PROJECT_SOURCE_DIR}/include
+)
+
+target_compile_options(
+    exchang_core
+    PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
 )
 
