@@ -21,3 +21,9 @@ add_executable(
 target_include_directories(exchange_sim PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
 target_compile_options(exchange_sim PRIVATE -Wall -Wextra -Wpedantic)
+
+add_library(
+    exchange_core
+    src/order_book.cpp
+)
+
