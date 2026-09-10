@@ -6,6 +6,7 @@
 
 #include "exchange/order_book.hpp"
 
+// basic expect logic for our tests
 void expect(bool condition, const std::string& message)
 {
     if (!condition)
