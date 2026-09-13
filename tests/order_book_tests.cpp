@@ -61,7 +61,7 @@ void test_best_bid_and_ask()
 }
 
 // testing if our orderbook can be swept when a large order comes in
-void test_multi_order_sweep()
+void test_multi_fill_sweep()
 {
     exchange::OrderBook book;
 
@@ -129,6 +129,26 @@ void test_multi_order_sweep()
     expect(*ask == 10135,
            "Best ask should be 10135 after sweep");
 
-
+           
 }
 
+// running both tests to ensure they pass at all times
+int main()
+{
+    try
+    {
+        test_best_bid_and_ask();
+        test_multi_fill_sweep();
+
+        std::cout << "All order book tests passed.\n";
+        return 0;
+    }
+    catch (const std::exception& error)
+    {
+        std::cerr << "TEST FAILED: "
+                  << error.what()
+                  << '\n';
+
+        return 1;
+    }
+}
