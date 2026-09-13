@@ -59,3 +59,8 @@ void test_best_bid_and_ask()
     expect(*ask == 10130, "Best ask should be 10130");
     
 }
+
+void test_multi_order_sweep()
+{
+    exchange::OrderBook book;
+}
