@@ -49,3 +49,29 @@ target_compile_options(
         -Wextra
         -Wpedantic
 )
+
+enable_testing()
+
+add_executable(
+    order_book_tests
+    tests/order_book_tests.cpp
+)
+
+target_link_libraries(
+    order_book_tests
+    PRIVATE
+        exchange_core
+)
+
+target_compile_options(
+    order_book_tests
+    PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
+)
+
+add_test(
+    NAME order_book_tests
+    COMMAND order_book_tests
+)
