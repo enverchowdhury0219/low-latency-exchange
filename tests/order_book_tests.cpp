@@ -60,7 +60,75 @@ void test_best_bid_and_ask()
     
 }
 
+// testing if our orderbook can be swept when a large order comes in
 void test_multi_order_sweep()
 {
     exchange::OrderBook book;
+
+    (void)book.submit({
+        1,
+        10130,
+        50,
+        exchange::Side::Sell
+    });
+
+    (void)book.submit({
+        2,
+        10130,
+        75,
+        exchange::Side::Sell
+    });
+
+    (void)book.submit({
+        3,
+        10135,
+        100,
+        exchange::Side::Sell
+    });
+
+    (void)book.submit({
+        4,
+        10145,
+        200,
+        exchange::Side::Sell
+    });
+
+        const auto trades = book.submit({
+        20,
+        10140,
+        200,
+        exchange::Side::Buy
+    });
+
+    expect(trades.size() == 3,
+           "Sweep should produce three trades");
+
+    expect(trades[0].price == 10130,
+           "First trade price should be 10130");
+
+    expect(trades[0].quantity == 50,
+           "First trade quantity should be 50");
+
+    expect(trades[1].price == 10130,
+           "Second trade price should be 10130");
+
+    expect(trades[1].quantity == 75,
+           "Second trade quantity should be 75");
+
+    expect(trades[2].price == 10135,
+           "Third trade price should be 10135");
+
+    expect(trades[2].quantity == 75,
+           "Third trade quantity should be 75");
+
+    const auto ask = book.best_ask();
+
+    expect(ask.has_value(),
+           "Best ask should still exist");
+
+    expect(*ask == 10135,
+           "Best ask should be 10135 after sweep");
+
+
 }
+
