@@ -181,6 +181,13 @@ void test_cancel_order()
         exchange::Side::Buy
     });
 
+    (void)book.submit({
+        11,
+        10120,
+        50,
+        exchange::Side::Buy
+    });
+
     expect(book.cancel(10),
            "Existing order should cancel successfully");
 
