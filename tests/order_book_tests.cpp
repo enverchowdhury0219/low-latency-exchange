@@ -269,7 +269,7 @@ void test_price_time_priority()
 
     expect(trades[1].quantity == 25,
            "Second seller should partially fill");
-           
+
 }
 
 // running both tests to ensure they pass at all times
@@ -279,6 +279,10 @@ int main()
     {
         test_best_bid_and_ask();
         test_multi_fill_sweep();
+        test_partial_fill();
+        test_cancel_order();
+        test_duplicate_order_id_rejected();
+        test_price_time_priority();
 
         std::cout << "All order book tests passed.\n";
         return 0;
