@@ -229,6 +229,48 @@ void test_duplicate_order_id_rejected()
 
 }
 
+// testing the price-time priority of the order book
+void test_price_time_priority()
+{
+    exchange::OrderBook book;
+
+    (void)book.submit({
+        100,
+        10130,
+        50,
+        exchange::Side::Sell
+    });
+
+    (void)book.submit({
+        101,
+        10130,
+        50,
+        exchange::Side::Sell
+    });
+
+    const auto trades = book.submit({
+        200,
+        10130,
+        75,
+        exchange::Side::Buy
+    });
+
+    expect(trades.size() == 2,
+           "Incoming order should generate two trades");
+
+    expect(trades[0].sell_order_id == 100,
+           "Earlier order should execute first");
+
+    expect(trades[0].quantity == 50,
+           "First seller should fully fill");
+
+    expect(trades[1].sell_order_id == 101,
+           "Later order should execute second");
+
+    expect(trades[1].quantity == 25,
+           "Second seller should partially fill");
+           
+}
 
 // running both tests to ensure they pass at all times
 int main()
