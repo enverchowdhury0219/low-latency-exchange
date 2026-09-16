@@ -169,6 +169,32 @@ void test_partial_fill()
            "Remaining seller should still be best ask");
 }
 
+// order cancellation test
+void test_cancel_order()
+{
+    exchange::OrderBook book;
+
+    (void)book.submit({
+        10,
+        10125,
+        100,
+        exchange::Side::Buy
+    });
+
+    expect(book.cancel(10),
+           "Existing order should cancel successfully");
+
+    const auto bid = book.best_bid();
+
+    expect(bid.has_value(),
+           "Best bid should still exist");
+
+    expect(*bid == 10120,
+           "Best bid should move to 10120 after cancel");
+
+    expect(!book.cancel(999),
+           "Missing order should not cancel");
+}
 
 
 
