@@ -132,6 +132,49 @@ void test_multi_fill_sweep()
            
 }
 
+//partial-fill test
+void test_partial_fill()
+{
+    exchange::OrderBook book;
+
+    (void)book.submit({
+        1,
+        10130,
+        150,
+        exchange::Side::Sell
+    });
+
+    const auto trades = book.submit({
+        2,
+        10140,
+        100,
+        exchange::Side::Buy
+    });
+
+    expect(trades.size() == 1,
+           "Partial fill should produce one trade");
+
+    expect(trades[0].quantity == 100,
+           "Trade quantity should be 100");
+
+    expect(trades[0].price == 10130,
+           "Trade should execute at resting price");
+
+    const auto ask = book.best_ask();
+
+    expect(ask.has_value(),
+           "Ask should remain after partial fill");
+
+    expect(*ask == 10130,
+           "Remaining seller should still be best ask");
+}
+
+
+
+
+
+
+
 // running both tests to ensure they pass at all times
 int main()
 {
