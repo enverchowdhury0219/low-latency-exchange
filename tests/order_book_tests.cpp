@@ -196,9 +196,38 @@ void test_cancel_order()
            "Missing order should not cancel");
 }
 
+// duplicate id rejection
+void test_duplicate_order_id_rejected()
+{
+    exchange::OrderBook book;
 
+    (void)book.submit({
+        42,
+        10120,
+        100,
+        exchange::Side::Buy
+    });
 
+    bool rejected = false;
 
+    try
+    {
+        (void)book.submit({
+            42,
+            10110,
+            50,
+            exchange::Side::Buy
+        });
+    }
+    catch (const std::invalid_argument&)
+    {
+        rejected = true;
+    }
+
+    expect(rejected,
+           "Duplicate live order ID should be rejected");
+
+}
 
 
 // running both tests to ensure they pass at all times
