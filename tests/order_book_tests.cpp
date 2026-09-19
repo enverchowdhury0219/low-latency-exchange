@@ -307,6 +307,7 @@ int main()
         test_cancel_order();
         test_duplicate_order_id_rejected();
         test_price_time_priority();
+        test_empty_book();
 
         std::cout << "All order book tests passed.\n";
         return 0;
