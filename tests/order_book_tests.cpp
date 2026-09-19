@@ -279,7 +279,23 @@ void test_price_time_priority()
 
 }
 
-// running both tests to ensure they pass at all times
+void test_empty_book()
+{
+    exchange::OrderBook book;
+    
+    expect(!book.best_bid().has_value(),
+           "Empty book should have no best bid");
+
+    expect(!book.best_ask().has_value(),
+           "Empty book should have no best ask");
+
+    expect(!book.cancel(999),
+           "Cancelling from empty book should fail");
+
+
+}
+
+// running tests to ensure they pass at all times
 int main()
 {
     try
