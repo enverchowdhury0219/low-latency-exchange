@@ -279,6 +279,7 @@ void test_price_time_priority()
 
 }
 
+// testing concept that empty book cant have a bid/ask and nothing to cancel
 void test_empty_book()
 {
     exchange::OrderBook book;
