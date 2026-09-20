@@ -296,6 +296,12 @@ void test_empty_book()
 
 }
 
+// testing whether fully filled price level disappears
+void test_fill_level_removed()
+{
+
+}
+
 // running tests to ensure they pass at all times
 int main()
 {
