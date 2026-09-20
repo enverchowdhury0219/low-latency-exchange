@@ -299,6 +299,27 @@ void test_empty_book()
 // testing whether fully filled price level disappears
 void test_fill_level_removed()
 {
+    exchange::OrderBook book;
+
+    (void)book.submit({
+        1,
+        10130,
+        100,
+        exchange::Side::Sell
+    });
+
+    const auto trades = book.submit({
+        2,
+        10130,
+        100,
+        exchange::Side::Buy
+    });
+
+    expect(trades.size() == 1,
+           "Full fill should produce one trade");
+
+    expect(!book.best_ask().has_value(),
+           "Filled ask level should disappear");
 
 }
 
