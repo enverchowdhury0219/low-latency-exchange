@@ -323,6 +323,60 @@ void test_fill_level_removed()
 
 }
 
+// testing the behavior of our submit() function
+void test_uncrossed_remainder_rests()
+{
+    exchange::OrderBook book;
+
+     (void)book.submit({
+        1,
+        10130,
+        50,
+        exchange::Side::Sell
+    });
+
+    (void)book.submit({
+        2,
+        10135,
+        75,
+        exchange::Side::Sell
+    });
+
+    (void)book.submit({
+        3,
+        10145,
+        100,
+        exchange::Side::Sell
+    });
+
+    const auto trades = book.submit({
+        20,
+        10140,
+        200,
+        exchange::Side::Buy
+    });
+
+    expect(trades.size() == 2,
+           "Order should execute at two acceptable ask levels");
+
+    const auto bid = book.best_bid();
+    const auto ask = book.best_ask();
+
+    expect(bid.has_value(),
+           "Unfilled remainder should rest as bid");
+
+    expect(ask.has_value(),
+           "Higher ask should remain");
+
+    expect(*bid == 10140,
+           "Remaining buy should rest at 10140");
+
+    expect(*ask == 10145,
+           "Uncrossed ask should remain at 10145");
+           
+}
+
+
 // running tests to ensure they pass at all times
 int main()
 {
