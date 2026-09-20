@@ -373,7 +373,7 @@ void test_uncrossed_remainder_rests()
 
     expect(*ask == 10145,
            "Uncrossed ask should remain at 10145");
-           
+
 }
 
 
@@ -389,6 +389,8 @@ int main()
         test_duplicate_order_id_rejected();
         test_price_time_priority();
         test_empty_book();
+        test_fill_level_removed();
+        test_uncrossed_remainder_rests();
 
         std::cout << "All order book tests passed.\n";
         return 0;
