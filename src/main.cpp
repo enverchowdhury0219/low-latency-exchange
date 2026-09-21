@@ -34,7 +34,7 @@ int main()
         std::cout
             << "Trade: "
             << trade.quantity
-            << "@"
+            << " @ "
             << trade.price
             << '\n';
     }
@@ -46,7 +46,7 @@ int main()
 
     if (const auto ask = book.best_ask())
     {
-        std::cout << "Best bid: " << *ask << '\n';
+        std::cout << "Best ask: " << *ask << '\n';
     }
 
     return 0;
