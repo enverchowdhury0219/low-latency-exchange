@@ -3,47 +3,53 @@
 
 #include "exchange/order_book.hpp"
 
-// added 3 buy orders but 2 bid price levels as 2 orders have same price
 int main()
 {
+    exchange::OrderBook book;
 
-    exchange::OrderBook cancel_book;
-
-    (void)cancel_book.submit({
-        10,
-        10125,
+     (void)book.submit({
+        1,
+        10130,
         100,
+        exchange::Side::Sell
+    });
+
+    (void)book.submit({
+        2,
+        10135,
+        100,
+        exchange::Side::Sell
+    });
+
+     // our incoming trade of buying 150 for 10140
+    const auto trades = book.submit({
+        3,
+        10140,
+        150,
         exchange::Side::Buy
     });
 
-    (void)cancel_book.submit({
-        11,
-        10120,
-        50,
-        exchange::Side::Buy
-
-    });
-
-    std::cout << "Best bid before cancel: "
-          << *cancel_book.best_bid()
-          << '\n';
-    
-
-    const bool cancelled = cancel_book.cancel(10);
-
-    std::cout << "Cancelled #10: "
-            << std::boolalpha
-            << cancelled
+    for (const auto& trade: trades)
+    {
+        std::cout
+            << "Trade: "
+            << trade.quantity
+            << "@"
+            << trade.price
             << '\n';
+    }
 
-    std::cout << "Best bid after cancel: "
-            << *cancel_book.best_bid()
-            << '\n';
+    if (const auto bid = book.best_bid())
+    {
+        std::cout << "Best bid: " << *bid << '\n';
+    }
 
+    if (const auto ask = book.best_ask())
+    {
+        std::cout << "Best bid: " << *ask << '\n';
+    }
 
-    std::cout << "Cancel #999: "
-          << cancel_book.cancel(999)
-          << '\n';
-
+    return 0;
 }
+
 
