@@ -325,30 +325,30 @@ OrderBook::replace(
 
     if (location_it == order_locations_.end())
     {
-        return std::nullopt;
+        return std::nullopt; // did not find that order
     }
 
+    // copy the old order before cancelling it
     const Order old_order =
         *(location_it -> second.order);
 
     if (!cancel(id))
     {
-        return std::nullopt;
+        return std::nullopt; 
     }
 
+    // creates a newly arriving order with same id and side
     Order replacement{
         id,
         new_price,
         new_quantity,
-        old_order.side
+        old_order.side // we copied the old order's side before cancelling
     };
 
     return submit(replacement);
 
+    
 }
-
-
-
 
 }
 

@@ -37,7 +37,7 @@ public:
 
     [[nodiscard]] std::optional<std::vector<Trade>>
     replace(
-        OrderId id,
+        OrderId id, // used as the lookup key, does not get replaced
         Price new_price,
         Quantity new_quantity
     );
