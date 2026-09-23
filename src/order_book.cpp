@@ -306,6 +306,48 @@ bool OrderBook::cancel(OrderId id)
     
 }
 
+std::optional<std::vector<Trade>>
+OrderBook::replace(
+    OrderId id,
+    Price new_price,
+    Quantity new_quantity
+)
+{
+    if (new_quantity == 0)
+    {
+        throw std::invalid_argument(
+            "Replacement quantity must be non-zero"
+        );
+    }
+
+    const auto location_it =
+        order_locations_.find(id);
+
+    if (location_it == order_locations_.end())
+    {
+        return std::nullopt;
+    }
+
+    const Order old_order =
+        *(location_it -> second.order);
+
+    if (!cancel(id))
+    {
+        return std::nullopt;
+    }
+
+    Order replacement{
+        id,
+        new_price,
+        new_quantity,
+        old_order.side
+    };
+
+    return submit(replacement);
+
+}
+
+
 
 
 }
