@@ -35,6 +35,14 @@ public:
 
     [[nodiscard]] bool cancel(OrderId id); // T - order existed and canclled, F - no live order with that ID
 
+    [[nodiscard]] std::optional<std::vector<Trade>>
+    replace(
+        OrderId id,
+        Price new_price,
+        Quantity new_quantity
+    );
+
+
 
 private:
     using OrdersAtPrice = std::list<Order>;
