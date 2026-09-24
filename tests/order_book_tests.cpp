@@ -505,6 +505,7 @@ int main()
         test_uncrossed_remainder_rests();
         test_replace_resting_order();
         test_replace_crosses_book();
+        test_replace_loses_time_priority();
 
         std::cout << "All order book tests passed.\n";
         return 0;
