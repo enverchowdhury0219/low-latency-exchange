@@ -461,6 +461,8 @@ int main()
         test_empty_book();
         test_fill_level_removed();
         test_uncrossed_remainder_rests();
+        test_replace_resting_order();
+        test_replace_crosses_book();
 
         std::cout << "All order book tests passed.\n";
         return 0;
