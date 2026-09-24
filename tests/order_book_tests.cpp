@@ -451,7 +451,42 @@ void test_replace_loses_time_priority()
 {
     exchange::OrderBook book;
 
-    
+
+    (void)book.submit({
+        1,
+        10130,
+        50,
+        exchange::Side::Sell
+    });
+
+    (void)book.submit({
+        2,
+        10130,
+        50,
+        exchange::Side::Sell
+    });
+
+    const auto replace_result =
+        book.replace(1, 10130, 50);
+
+    expect(replace_result.has_value(),
+           "Replace should succeed");
+
+    expect(replace_result->empty(),
+           "Same-price replacement should not trade");
+
+    const auto trades = book.submit({
+        10,
+        10130,
+        50,
+        exchange::Side::Buy
+    });
+
+    expect(trades.size() == 1,
+           "Incoming buy should produce one trade");
+
+    expect(trades[0].sell_order_id == 2,
+           "Order #2 should now have priority over replaced #1");
 }
 
 // running tests to ensure they pass at all times
