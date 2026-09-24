@@ -376,6 +376,35 @@ void test_uncrossed_remainder_rests()
 
 }
 
+// testing a non-crossig replacement
+void test_replace_resting_order()
+{
+    exchange::OrderBook book;
+
+     (void)book.submit({
+        10,
+        10120,
+        100,
+        exchange::Side::Buy
+    });
+
+    const auto result =
+        book.replace(10, 10125, 150);
+
+    expect(result.has_value(),
+           "Existing order should be replaceable");
+
+    expect(result->empty(),
+           "Non-crossing replacement should produce no trades");
+
+    const auto bid = book.best_bid();
+
+    expect(bid.has_value(),
+           "Replacement should remain in the book");
+
+    expect(*bid == 10125,
+           "Replacement should rest at new price");
+}
 
 // running tests to ensure they pass at all times
 int main()
