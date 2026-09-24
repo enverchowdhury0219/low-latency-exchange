@@ -447,6 +447,13 @@ void test_replace_crosses_book()
            "Trade quantity should be 100");
 }
 
+void test_replace_loses_time_priority()
+{
+    exchange::OrderBook book;
+
+    
+}
+
 // running tests to ensure they pass at all times
 int main()
 {
