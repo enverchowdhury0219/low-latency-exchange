@@ -376,7 +376,7 @@ void test_uncrossed_remainder_rests()
 
 }
 
-// testing a non-crossig replacement
+// testing a non-crossig replacement, so no sellers exist and no trade happens
 void test_replace_resting_order()
 {
     exchange::OrderBook book;
@@ -404,6 +404,47 @@ void test_replace_resting_order()
 
     expect(*bid == 10125,
            "Replacement should rest at new price");
+}
+
+// testing when a replacement would cause a trade to occur as it crosses book
+void test_replace_crosses_book()
+{
+    exchange::OrderBook book;
+
+      (void)book.submit({
+        1,
+        10130,
+        100,
+        exchange::Side::Sell
+    });
+
+    (void)book.submit({
+        10,
+        10120,
+        100,
+        exchange::Side::Buy
+    });
+
+    const auto result =
+        book.replace(10, 10135, 100);
+
+    expect(result.has_value(),
+           "Existing order should be replaceable");
+
+    expect(result->size() == 1,
+           "Crossing replacement should produce one trade");
+
+    expect((*result)[0].buy_order_id == 10,
+           "Replacement order should be buyer");
+
+    expect((*result)[0].sell_order_id == 1,
+           "Resting seller should be matched");
+
+    expect((*result)[0].price == 10130,
+           "Trade should execute at resting seller price");
+
+    expect((*result)[0].quantity == 100,
+           "Trade quantity should be 100");
 }
 
 // running tests to ensure they pass at all times
