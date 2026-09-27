@@ -10,7 +10,7 @@
 
 #include "exchange/order.hpp"
 #include "exchange/trade.hpp"
-
+#include "exchange/order_result.hpp"
 
 namespace exchange
 {
@@ -54,7 +54,8 @@ private:
     using AskLevels =
         std::map<Price, OrdersAtPrice, std::less<Price>>; // we want the lowest ask
 
-    void validate_order(const Order& order) const; // the const at end means func is read-only, will not modify obj its called on
+    [[nodiscard]] RejectReason
+    validate_order(const Order& order) const;
 
     
     void add_order(const Order& order);
