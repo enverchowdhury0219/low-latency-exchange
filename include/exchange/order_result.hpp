@@ -7,7 +7,7 @@
 namespace exchange
 {
 
-// some rejection reasons, so we display these instead of throwing exceptions
+// rejection reasons, so we display these instead of throwing exceptions
 enum class RejectReason
 {
     None,
