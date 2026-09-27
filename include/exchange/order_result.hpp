@@ -11,7 +11,7 @@ namespace exchange
 enum class RejectReason
 {
     None,
-    InvalidOrder,
+    InvalidOrderId,
     InvalidQuantity,
     DuplicateOrderId
 };

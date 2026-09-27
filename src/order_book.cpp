@@ -230,28 +230,25 @@ OrderBook::submit(Order incoming)
     return trades;
 }
 
-void OrderBook::validate_order(const Order& order) const
+RejectReason
+OrderBook::validate_order(const Order& order) const
 {
-    if (order.id == 0){
-        throw std::invalid_argument(
-            "Order ID must be non-zero"
-        );
+    if (order.id == 0)
+    {
+        return RejectReason::InvalidOrderId;
     }
 
     if (order.quantity == 0)
     {
-        throw std::invalid_argument(
-            "Order quantity must be non-zero"
-        );
+        return RejectReason::InvalidQuantity;
     }
 
     if (order_locations_.find(order.id) != order_locations_.end())
     {
-        throw std::invalid_argument(
-            "Order ID is already live"
-        );
+        return RejectReason::DuplicateOrderId;
     }
 
+    return RejectReason::None;
 }
 
 bool OrderBook::cancel(OrderId id)
