@@ -240,7 +240,7 @@ OrderBook::submit(Order incoming)
     return {
         true,
         RejectReason::None,
-        std::move(trades)
+        std::move(trades) // essentially 'steals' the value of trades and stores it in this SubmitResult
     };
 
 
@@ -358,9 +358,14 @@ OrderBook::replace(
         old_order.side // we copied the old order's side before cancelling
     };
 
-    return submit(replacement);
+    auto submit_result = submit(replacement);
 
-    
+    if (!submit_result.accepted)
+    {
+        return std::nullopt;
+    }
+
+    return std::move(submit_result.trades);
 }
 
 }
