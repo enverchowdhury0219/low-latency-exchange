@@ -1,6 +1,7 @@
 #include "exchange/order_book.hpp"
 #include <algorithm> // for std::min
 #include <stdexcept> // for throwing exceptions
+#include <utility>
 
 
 namespace exchange
@@ -214,20 +215,35 @@ OrderBook::execute(Order& incoming)
     return trades;
 }
 
-std::vector<Trade>
+SubmitResult
 OrderBook::submit(Order incoming)
 {
-    // making sure our order id and quantity are both non-zero
+   const RejectReason reject_reason = 
     validate_order(incoming);
-    
-    // fully executes the trades till its either all done or the order is passive
+
+    if (reject_reason != RejectReason::None)
+    {
+        return {
+            false,
+            reject_reason,
+            {}
+        };
+    }
+
     auto trades = execute(incoming);
 
-    if (incoming.quantity > 0){
+    if (incoming.quantity > 0)
+    {
         add_order(incoming);
     }
 
-    return trades;
+    return {
+        true,
+        RejectReason::None,
+        std::move(trades)
+    };
+
+
 }
 
 RejectReason
