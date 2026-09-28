@@ -19,8 +19,8 @@ namespace exchange
 class OrderBook
 {
 public:
-    [[nodiscard]] std::vector<Trade>
-    submit(Order incoming); // we accept the order by value here, so this function gets own copy to mutate
+    [[nodiscard]] SubmitResult
+    submit(Order incomimng);
 
     [[nodiscard]] std::optional<Price> best_bid() const;
     [[nodiscard]] std::optional<Price> best_ask() const;
