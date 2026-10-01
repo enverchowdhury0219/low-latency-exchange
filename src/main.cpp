@@ -22,14 +22,14 @@ int main()
     });
 
      // our incoming trade of buying 150 for 10140
-    const auto trades = book.submit({
+    const auto result = book.submit({
         3,
         10140,
         150,
         exchange::Side::Buy
     });
 
-    for (const auto& trade: trades)
+    for (const auto& trade: result.trades)
     {
         std::cout
             << "Trade: "
