@@ -93,12 +93,17 @@ void test_multi_fill_sweep()
         exchange::Side::Sell
     });
 
-        const auto trades = book.submit({
+        const auto result = book.submit({
         20,
         10140,
         200,
         exchange::Side::Buy
     });
+
+    expect(result.accepted,
+       "Order should be accepted");
+
+    const auto& trades = result.trades;
 
     expect(trades.size() == 3,
            "Sweep should produce three trades");
@@ -144,12 +149,17 @@ void test_partial_fill()
         exchange::Side::Sell
     });
 
-    const auto trades = book.submit({
+    const auto result = book.submit({
         2,
         10140,
         100,
         exchange::Side::Buy
     });
+
+    expect(result.accepted,
+       "Order should be accepted");
+
+    const auto& trades = result.trades; 
 
     expect(trades.size() == 1,
            "Partial fill should produce one trade");
@@ -255,12 +265,18 @@ void test_price_time_priority()
         exchange::Side::Sell
     });
 
-    const auto trades = book.submit({
+    const auto result = book.submit({
         200,
         10130,
         75,
         exchange::Side::Buy
     });
+
+    expect(result.accepted,
+       "Order should be accepted");
+
+    const auto& trades = result.trades;
+    
 
     expect(trades.size() == 2,
            "Incoming order should generate two trades");
@@ -308,12 +324,17 @@ void test_fill_level_removed()
         exchange::Side::Sell
     });
 
-    const auto trades = book.submit({
+    const auto result = book.submit({
         2,
         10130,
         100,
         exchange::Side::Buy
     });
+
+    expect(result.accepted,
+       "Order should be accepted");
+
+    const auto& trades = result.trades;
 
     expect(trades.size() == 1,
            "Full fill should produce one trade");
@@ -349,12 +370,17 @@ void test_uncrossed_remainder_rests()
         exchange::Side::Sell
     });
 
-    const auto trades = book.submit({
+    const auto result = book.submit({
         20,
         10140,
         200,
         exchange::Side::Buy
     });
+
+    expect(result.accepted,
+       "Order should be accepted");
+
+    const auto& trades = result.trades;
 
     expect(trades.size() == 2,
            "Order should execute at two acceptable ask levels");
@@ -475,12 +501,17 @@ void test_replace_loses_time_priority()
     expect(replace_result->empty(),
            "Same-price replacement should not trade");
 
-    const auto trades = book.submit({
+    const auto result = book.submit({
         10,
         10130,
         50,
         exchange::Side::Buy
     });
+
+    expect(result.accepted,
+       "Order should be accepted");
+
+    const auto& trades = result.trades;
 
     expect(trades.size() == 1,
            "Incoming buy should produce one trade");
