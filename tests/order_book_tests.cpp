@@ -542,6 +542,28 @@ void test_invalid_order_id_rejected()
     );
 }
 
+void test_zero_quantity_rejected()
+{
+    exchange::OrderBook book;
+
+    const auto result = book.submit({
+    1,
+    10120,
+    0,
+    exchange::Side::Buy
+    });
+
+    expect(!result.accepted,
+           "Zero quantity should be rejected");
+
+    expect(
+        result.reject_reason ==
+            exchange::RejectReason::InvalidQuantity,
+        "Reject reason should be InvalidQuantity"
+    );
+
+}
+
 // running tests to ensure they pass at all times
 int main()
 {
