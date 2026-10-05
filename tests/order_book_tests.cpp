@@ -225,24 +225,24 @@ void test_duplicate_order_id_rejected()
         exchange::Side::Buy
     });
 
-    bool rejected = false;
+    const auto result = book.submit({
+        42,
+        10110,
+        50,
+        exchange::Side::Buy
+    });
 
-    try
-    {
-        (void)book.submit({
-            42,
-            10110,
-            50,
-            exchange::Side::Buy
-        });
-    }
-    catch (const std::invalid_argument&)
-    {
-        rejected = true;
-    }
+    expect(!result.accepted,
+           "Duplicate order should be rejected");
 
-    expect(rejected,
-           "Duplicate live order ID should be rejected");
+    expect(
+        result.reject_reason ==
+            exchange::RejectReason::DuplicateOrderId,
+        "Reject reason should be DuplicateOrderId"
+    );
+
+    expect(result.trades.empty(),
+           "Rejected order should produce no trades");
 
 }
 
