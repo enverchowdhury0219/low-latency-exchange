@@ -520,12 +520,13 @@ void test_replace_loses_time_priority()
            "Order #2 should now have priority over replaced #1");
 }
 
+// test for entering invalid order id into the book
 void test_invalid_order_id_rejected()
 {
     exchange::OrderBook book;
 
     const auto result = book.submit({
-        0,
+        0, // invalid id
         10120,
         100,
         exchange::Side::Buy
