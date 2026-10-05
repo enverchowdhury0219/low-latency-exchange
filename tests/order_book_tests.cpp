@@ -520,6 +520,27 @@ void test_replace_loses_time_priority()
            "Order #2 should now have priority over replaced #1");
 }
 
+void test_invalid_order_id_rejected()
+{
+    exchange::OrderBook book;
+
+    const auto result = book.submit({
+        0,
+        10120,
+        100,
+        exchange::Side::Buy
+    });
+
+    expect(!result.accepted,
+        "Order ID zero should be rejected");
+
+    expect(
+        result.reject_reason ==
+            exchange::RejectReason::InvalidOrderId,
+        "Reject reason should be InvalidOrderId"
+    );
+}
+
 // running tests to ensure they pass at all times
 int main()
 {
