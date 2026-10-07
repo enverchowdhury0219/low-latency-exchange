@@ -23,7 +23,7 @@ struct SubmitResult
     std::vector<Trade> trades;
 };
 
-// added a replacement result struct for better testabiltiy 
+// added a replacement result struct for better testabiltiy and for more exchange-like behavior
 struct ReplaceResult
 {
     bool replaced;
