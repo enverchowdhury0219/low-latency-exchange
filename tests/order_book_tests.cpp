@@ -417,11 +417,11 @@ void test_replace_resting_order()
     const auto result =
         book.replace(10, 10125, 150);
 
-    expect(result.has_value(),
-           "Existing order should be replaceable");
+    expect(result.replaced,
+       "Existing order should be replaceable");
 
-    expect(result->empty(),
-           "Non-crossing replacement should produce no trades");
+    expect(result.trades.empty(),
+       "Non-crossing replacement should produce no trades");
 
     const auto bid = book.best_bid();
 
@@ -454,23 +454,23 @@ void test_replace_crosses_book()
     const auto result =
         book.replace(10, 10135, 100);
 
-    expect(result.has_value(),
-           "Existing order should be replaceable");
+   expect(result.replaced,
+       "Existing order should be replaceable");
 
-    expect(result->size() == 1,
-           "Crossing replacement should produce one trade");
+    expect(result.trades.size() == 1,
+        "Crossing replacement should produce one trade");
 
-    expect((*result)[0].buy_order_id == 10,
-           "Replacement order should be buyer");
+    expect(result.trades[0].buy_order_id == 10,
+        "Replacement order should be buyer");
 
-    expect((*result)[0].sell_order_id == 1,
-           "Resting seller should be matched");
+    expect(result.trades[0].sell_order_id == 1,
+        "Resting seller should be matched");
 
-    expect((*result)[0].price == 10130,
-           "Trade should execute at resting seller price");
+    expect(result.trades[0].price == 10130,
+        "Trade should execute at resting seller price");
 
-    expect((*result)[0].quantity == 100,
-           "Trade quantity should be 100");
+    expect(result.trades[0].quantity == 100,
+        "Trade quantity should be 100");
 }
 
 void test_replace_loses_time_priority()
@@ -495,11 +495,11 @@ void test_replace_loses_time_priority()
     const auto replace_result =
         book.replace(1, 10130, 50);
 
-    expect(replace_result.has_value(),
-           "Replace should succeed");
+    expect(replace_result.replaced,
+       "Replace should succeed");
 
-    expect(replace_result->empty(),
-           "Same-price replacement should not trade");
+    expect(replace_result.trades.empty(),
+       "Same-price replacement should not trade");
 
     const auto result = book.submit({
         10,
