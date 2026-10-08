@@ -319,7 +319,7 @@ bool OrderBook::cancel(OrderId id)
     
 }
 
-std::optional<std::vector<Trade>>
+ReplaceResult
 OrderBook::replace(
     OrderId id,
     Price new_price,
@@ -328,9 +328,12 @@ OrderBook::replace(
 {
     if (new_quantity == 0)
     {
-        throw std::invalid_argument(
-            "Replacement quantity must be non-zero"
-        );
+        return {
+            false,
+            RejectReason::InvalidQuantity,
+            {}
+        };
+
     }
 
     const auto location_it =
@@ -338,7 +341,11 @@ OrderBook::replace(
 
     if (location_it == order_locations_.end())
     {
-        return std::nullopt; // did not find that order
+        return {
+            false,
+            RejectReason::InvalidOrderId,
+            {}
+        };
     }
 
     // copy the old order before cancelling it
@@ -347,7 +354,11 @@ OrderBook::replace(
 
     if (!cancel(id))
     {
-        return std::nullopt; 
+        return {
+            false,
+            RejectReason::InvalidOrderId,
+            {}
+        };
     }
 
     // creates a newly arriving order with same id and side
@@ -362,11 +373,18 @@ OrderBook::replace(
 
     if (!submit_result.accepted)
     {
-        return std::nullopt;
+        return {
+        false,
+        submit_result.reject_reason,
+        {}
+        };
     }
 
-    return std::move(submit_result.trades);
-}
+    return {
+        true,
+        RejectReason::None,
+        std::move(submit_result.trades)
+    };
 
 }
 
