@@ -564,6 +564,58 @@ void test_zero_quantity_rejected()
 
 }
 
+void test_replace_unknown_order()
+{
+    exchange::OrderBook book;
+
+    const auto result =
+        book.replace(999, 10130, 100);
+
+    expect(!result.replaced,
+           "Unknown order should not be replaced");
+
+    expect(
+        result.reject_reason ==
+            exchange::RejectReason::UnknownOrderId,
+        "Reject reason should be UnknownOrderId"
+    );
+
+    expect(result.trades.empty(),
+           "Failed replacement should produce no trades");
+}
+
+void test_replace_zero_quantity()
+{
+    exchange::OrderBook book;
+
+    (void)book.submit({
+        10,
+        10120,
+        100,
+        exchange::Side::Buy
+    });
+
+    const auto result =
+        book.replace(10, 10125, 0);
+
+    expect(!result.replaced,
+           "Zero-quantity replacement should fail");
+
+    expect(
+        result.reject_reason ==
+            exchange::RejectReason::InvalidQuantity,
+        "Reject reason should be InvalidQuantity"
+    );
+
+    const auto bid = book.best_bid();
+
+    expect(bid.has_value(),
+           "Original order should remain after failed replace");
+
+    expect(*bid == 10120,
+           "Failed replace must not modify original order");
+}
+
 // running tests to ensure they pass at all times
 int main()
 {
