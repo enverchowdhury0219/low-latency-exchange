@@ -13,7 +13,8 @@ enum class RejectReason
     None,
     InvalidOrderId,
     InvalidQuantity,
-    DuplicateOrderId
+    DuplicateOrderId,
+    UnknownOrderId
 };
 
 struct SubmitResult

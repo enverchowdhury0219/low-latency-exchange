@@ -344,7 +344,7 @@ OrderBook::replace(
     {
         return {
             false,
-            RejectReason::InvalidOrderId,
+            RejectReason::UnknownOrderId,
             {}
         };
     }
@@ -357,7 +357,7 @@ OrderBook::replace(
     {
         return {
             false,
-            RejectReason::InvalidOrderId,
+            RejectReason::UnknownOrderId,
             {}
         };
     }
