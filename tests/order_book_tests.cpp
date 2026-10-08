@@ -635,6 +635,8 @@ int main()
         test_replace_loses_time_priority();
         test_invalid_order_id_rejected();
         test_zero_quantity_rejected();
+        test_replace_unknown_order();
+        test_replace_zero_quantity();
 
         std::cout << "All order book tests passed.\n";
         return 0;
