@@ -328,6 +328,7 @@ OrderBook::replace(
 {
     if (new_quantity == 0)
     {
+        // now we return ReplaceResults
         return {
             false,
             RejectReason::InvalidQuantity,
