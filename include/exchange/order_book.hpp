@@ -35,7 +35,7 @@ public:
 
     [[nodiscard]] bool cancel(OrderId id); // T - order existed and canclled, F - no live order with that ID
 
-    [[nodiscard]] std::optional<std::vector<Trade>>
+    [[nodiscard]] ReplaceResult
     replace(
         OrderId id, // used as the lookup key, does not get replaced
         Price new_price,
