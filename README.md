@@ -1,17 +1,17 @@
 # Low-Latency Exchange
 
-A work-in-progress C++ electronic exchange and limit order book built as a hands-on exploration of low-latency systems and algorithmic trading infrastructure.
+a work-in-progress C++ electronic exchange and limit order book built as a hands-on exploration of low-latency systems and algorithmic trading infrastructure.
 
 ## Current Features
 
-- Limit order book with bid/ask price levels
-- Price-time priority
-- Partial and multi-level fills
-- Resting order management
-- Order cancellation and replacement
-- Duplicate-order protection
-- Explicit submit/reject results
-- Automated order book tests with CTest
+- limit order book with bid/ask price levels
+- price-time priority
+- partial and multi-level fills
+- resting order management
+- order cancellation and replacement
+- duplicate-order protection
+- explicit submit/reject results
+- automated order book tests with CTest
 
 ## Current Architecture
 
@@ -24,7 +24,7 @@ The engine currently uses:
 
 These structures are intentionally being treated as a correct baseline before profiling and low-latency optimization.
 
-## Project Goal
+## Goal
 
 The goal is to progressively build from a correct single-threaded matching engine into a more complete electronic trading system while learning and measuring the engineering tradeoffs behind:
 
@@ -41,4 +41,4 @@ The goal is to progressively build from a correct single-threaded matching engin
 
 **Work in progress.**
 
-Current focus: completing the exchange/order lifecycle and preparing the engine for event handling, market-data output, benchmarking, and performance optimization.
+current focus: completing the exchange/order lifecycle and preparing the engine for event handling, market-data output, benchmarking, and performance optimization.
