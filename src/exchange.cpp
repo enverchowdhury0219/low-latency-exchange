@@ -12,6 +12,8 @@ Exchange::submit(Order order)
 
     if (!result.accepted)
     {
+        // .push_back is a vector function to add new element to end of container
+        // so adding the order being rejected to our exchange events vector
         events.push_back(
             OrderRejected{
                 order.id,
@@ -22,6 +24,7 @@ Exchange::submit(Order order)
         return events;
     }
 
+    // adding the suucessful add order event to our event vector
     events.push_back(
         OrderAccepted{
             order.id
@@ -30,6 +33,7 @@ Exchange::submit(Order order)
 
     for (const auto& trade : result.trades)
     {
+        // logging each trade that takes place as an event
         events.push_back(trade);
     }
 

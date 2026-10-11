@@ -15,6 +15,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_library(
     exchange_core
     src/order_book.cpp
+    src/exchange.cpp
 )
 
 target_include_directories(
