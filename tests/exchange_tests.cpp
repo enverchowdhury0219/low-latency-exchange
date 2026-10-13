@@ -109,3 +109,25 @@ void test_rejected_order_event()
         "Reject reason should be InvalidOrderId"
     );
 }
+
+int main()
+{
+    try
+    {
+        test_accepted_order_event();
+        test_trade_event();
+        test_rejected_order_event();
+
+        std::cout << "All exchange tests passed.\n";
+        return 0;
+    }
+    catch (const std::exception& error)
+    {
+        std::cerr
+            << "TEST FAILED: "
+            << error.what()
+            << '\n';
+
+        return 1;
+    }
+}
