@@ -82,3 +82,30 @@ void test_trade_event()
     expect(trade->quantity == 100,
            "Trade quantity should be 100");
 }
+
+void test_rejected_order_event()
+{
+    exchange::Exchange exchange;
+
+    const auto events = exchange.submit({
+        0,
+        10130,
+        100,
+        exchange::Side::Buy
+    });
+
+    expect(events.size() == 1,
+           "Rejected order should produce one event");
+
+    const auto* rejected =
+        std::get_if<exchange::OrderRejected>(&events[0]);
+
+    expect(rejected != nullptr,
+           "Event should be OrderRejected");
+
+    expect(
+        rejected->reason ==
+            exchange::RejectReason::InvalidOrderId,
+        "Reject reason should be InvalidOrderId"
+    );
+}
