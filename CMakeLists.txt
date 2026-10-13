@@ -76,3 +76,27 @@ add_test(
     NAME order_book_tests
     COMMAND order_book_tests
 )
+
+add_executable(
+    exchange_tests
+    tests/exchange_tests.cpp
+)
+
+target_link_libraries(
+    exchange_tests
+    PRIVATE
+        exchange_core
+)
+
+target_compile_options(
+    exchange_tests
+    PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
+)
+
+add_test(
+    NAME exchange_tests
+    COMMAND exchange_tests
+)
