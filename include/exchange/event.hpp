@@ -20,6 +20,27 @@ struct OrderRejected
     OrderId order_id;
     RejectReason reason;
 };
+
+struct OrderCancelled
+{
+    OrderId order_id;
+};
+
+struct CancelRejected
+{
+    OrderId order_id;
+};
+
+struct OrderReplaced
+{
+    OrderId order_id;
+};
+
+struct ReplaceRejected
+{
+    OrderId order_id;
+    RejectReason reason;
+};
   
 // we use variant here to say that this object contains exactly one valid event type
 using ExchangeEvent = 
@@ -32,27 +53,6 @@ using ExchangeEvent =
     ReplaceRejected,
     Trade
     >;
-
-    struct OrderCancelled
-    {
-        OrderId order_id;
-    };
-
-    struct CancelRejected
-    {
-        OrderId order_id;
-    };
-
-    struct OrderReplaced
-    {
-        OrderId order_id;
-    };
-
-    struct ReplaceRejected
-    {
-        OrderId order_id;
-        RejectReason reason;
-    };
 
 
 }

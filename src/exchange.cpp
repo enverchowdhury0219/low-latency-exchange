@@ -40,4 +40,61 @@ Exchange::submit(Order order)
     return events;
 }
 
+std::vector<ExchangeEvent>
+Exchange::cancel(OrderId id)
+{
+    std::vector<ExchangeEvent> events;
+
+    if (book_.cancel(id))
+    {
+        events.push_back(
+            OrderCancelled{id}
+        );
+    }
+    else
+    {
+        events.push_back(
+            CancelRejected{id}
+        );
+    }
+
+    return events;
+}
+
+std::vector<ExchangeEvent>
+Exchange::replace(
+    OrderId id,
+    Price new_price,
+    Quantity new_quantity
+)
+{
+    std::vector<ExchangeEvent> events;
+
+    const auto result =
+        book_.replace(id, new_price, new_quantity);
+
+    if (!result.replaced)
+    {
+        events.push_back(
+            ReplaceRejected{
+                id,
+                result.reject_reason
+            }
+        );
+
+        return events;
+    }
+
+    events.push_back(
+        OrderReplaced{id}
+    );
+
+    for (const auto& trade : result.trades)
+    {
+        events.push_back(trade);
+    }
+
+    return events;
+}
+
 }
