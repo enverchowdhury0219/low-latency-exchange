@@ -110,6 +110,33 @@ void test_rejected_order_event()
     );
 }
 
+// testing when an order is cancelled in the exchange
+void test_cancel_event()
+{
+    exchange::Exchange exchange;
+
+    (void)exchange.submit({
+        10,
+        10120,
+        100,
+        exchange::Side::Buy
+    });
+
+    const auto events = exchange.cancel(10);
+
+    expect(events.size() == 1,
+           "Cancel should produce one event");
+
+    const auto* cancelled =
+        std::get_if<exchange::OrderCancelled>(&events[0]);
+
+    expect(cancelled != nullptr,
+           "Event should be OrderCancelled");
+
+    expect(cancelled->order_id == 10,
+           "Cancelled event should contain order ID 10");
+}
+
 int main()
 {
     try
