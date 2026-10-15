@@ -156,6 +156,58 @@ void test_cancel_rejected_event()
            "Rejected cancel should contain requested ID");
 }
 
+void test_replace_trade_events()
+{
+    exchange::Exchange exchange;
+
+    (void)exchange.submit({
+        1,
+        10130,
+        100,
+        exchange::Side::Sell
+    });
+
+    (void)exchange.submit({
+        10,
+        10120,
+        100,
+        exchange::Side::Buy
+    });
+
+    const auto events =
+        exchange.replace(10, 10135, 100);
+
+    expect(events.size() == 2,
+           "Crossing replace should produce replace and trade events");
+
+    const auto* replaced =
+        std::get_if<exchange::OrderReplaced>(&events[0]);
+
+    expect(replaced != nullptr,
+           "First event should be OrderReplaced");
+
+    expect(replaced->order_id == 10,
+           "Replace event should contain order ID 10");
+
+    const auto* trade =
+        std::get_if<exchange::Trade>(&events[1]);
+
+    expect(trade != nullptr,
+           "Second event should be Trade");
+
+    expect(trade->buy_order_id == 10,
+           "Replacement should be buyer");
+
+    expect(trade->sell_order_id == 1,
+           "Resting seller should be matched");
+
+    expect(trade->price == 10130,
+           "Trade should execute at resting price");
+
+    expect(trade->quantity == 100,
+           "Trade quantity should be 100");
+}
+
 int main()
 {
     try
