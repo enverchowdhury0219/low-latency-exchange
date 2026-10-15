@@ -137,6 +137,25 @@ void test_cancel_event()
            "Cancelled event should contain order ID 10");
 }
 
+void test_cancel_rejected_event()
+{
+    exchange::Exchange exchange;
+
+    const auto events = exchange.cancel(999);
+
+    expect(events.size() == 1,
+           "Rejected cancel should produce one event");
+
+    const auto* rejected =
+        std::get_if<exchange::CancelRejected>(&events[0]);
+
+    expect(rejected != nullptr,
+           "Event should be CancelRejected");
+
+    expect(rejected->order_id == 999,
+           "Rejected cancel should contain requested ID");
+}
+
 int main()
 {
     try
