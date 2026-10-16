@@ -37,6 +37,8 @@ Exchange::submit(Order order)
         events.push_back(trade);
     }
 
+    events.push_back(top_of_book());
+
     return events;
 }
 
@@ -50,6 +52,8 @@ Exchange::cancel(OrderId id)
         events.push_back(
             OrderCancelled{id}
         );
+
+        events.push_back(top_of_book());
     }
     else
     {
@@ -94,7 +98,17 @@ Exchange::replace(
         events.push_back(trade);
     }
 
+    events.push_back(top_of_book());
+
     return events;
+}
+
+TopOfBookUpdate
+Exchange::top_of_book() const{
+    return {
+        book_.best_bid(),
+        book_.best_ask()
+    };
 }
 
 }
