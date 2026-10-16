@@ -97,7 +97,8 @@ Exchange::replace(
     {
         events.push_back(trade);
     }
-
+   
+    // we only add the successful version of this event to our events
     events.push_back(top_of_book());
 
     return events;
