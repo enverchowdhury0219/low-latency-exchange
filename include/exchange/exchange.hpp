@@ -26,7 +26,12 @@ public:
     );
 
 private:
+    [[nodiscard]] TopOfBookUpdate
+    top_of_book() const;
+    
     OrderBook book_;
+
+
 };
 
 
