@@ -104,6 +104,7 @@ Exchange::replace(
     return events;
 }
 
+// function we use to get the top of our book at any time
 TopOfBookUpdate
 Exchange::top_of_book() const{
     return {
