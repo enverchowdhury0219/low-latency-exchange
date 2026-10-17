@@ -87,7 +87,7 @@ void test_trade_event()
 
     expect(!top->best_ask.has_value(),
         "Book should have no ask after full fill");
-        
+
     expect(trade != nullptr,
            "Second event should be Trade");
 
@@ -145,8 +145,8 @@ void test_cancel_event()
 
     const auto events = exchange.cancel(10);
 
-    expect(events.size() == 1,
-           "Cancel should produce one event");
+    expect(events.size() == 2,
+           "Cancel should produce cancellation and market data");
 
     const auto* cancelled =
         std::get_if<exchange::OrderCancelled>(&events[0]);
@@ -198,9 +198,15 @@ void test_replace_trade_events()
     const auto events =
         exchange.replace(10, 10135, 100);
 
-    expect(events.size() == 2,
-           "Crossing replace should produce replace and trade events");
+    expect(events.size() == 3,
+           "Crossing replace should produce replace, trade, and market data");
 
+    const auto* top =
+    std::get_if<exchange::TopOfBookUpdate>(&events[2]);
+
+    expect(top != nullptr,
+       "Third event should be TopOfBookUpdate");
+       
     const auto* replaced =
         std::get_if<exchange::OrderReplaced>(&events[0]);
 

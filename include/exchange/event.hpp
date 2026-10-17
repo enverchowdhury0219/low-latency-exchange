@@ -47,7 +47,7 @@ struct ReplaceRejected
 // we could have a best bid but no best ask (called top of book)
 struct TopOfBookUpdate
 {
-    std::optional<Price> best_price;
+    std::optional<Price> best_bid;
     std::optional<Price> best_ask;
 };
   
