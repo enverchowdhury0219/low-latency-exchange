@@ -30,6 +30,12 @@ void test_accepted_order_event()
     const auto* accepted =
         std::get_if<exchange::OrderAccepted>(&events[0]);
 
+    expect(accepted != nullptr,
+           "Event should be OrderAccepted");
+
+    expect(accepted->order_id == 1,
+           "Accepted event should contain order ID 1");
+
     const auto* top =
     std::get_if<exchange::TopOfBookUpdate>(&events[1]);
 
@@ -206,7 +212,7 @@ void test_replace_trade_events()
 
     expect(top != nullptr,
        "Third event should be TopOfBookUpdate");
-       
+
     const auto* replaced =
         std::get_if<exchange::OrderReplaced>(&events[0]);
 
