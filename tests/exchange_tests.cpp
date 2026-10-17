@@ -24,17 +24,26 @@ void test_accepted_order_event()
         exchange::Side::Sell
     });
 
-    expect(events.size() == 1,
-           "Resting order should produce one event");
+    expect(events.size() == 2,
+           "Resting order should produce acceptance and market data");
 
     const auto* accepted =
         std::get_if<exchange::OrderAccepted>(&events[0]);
 
-    expect(accepted != nullptr,
-           "Event should be OrderAccepted");
+    const auto* top =
+    std::get_if<exchange::TopOfBookUpdate>(&events[1]);
 
-    expect(accepted->order_id == 1,
-           "Accepted event should contain order ID 1");
+    expect(top != nullptr,
+        "Second event should be TopOfBookUpdate");
+
+    expect(!top->best_bid.has_value(),
+        "No best bid should exist");
+
+    expect(top->best_ask.has_value(),
+        "Best ask should exist");
+
+    expect(*top->best_ask == 10130,
+        "Best ask should be 10130");
 }
 
 void test_trade_event()
@@ -55,8 +64,8 @@ void test_trade_event()
         exchange::Side::Buy
     });
 
-    expect(events.size() == 2,
-           "Crossing order should produce acceptance and trade");
+    expect(events.size() == 3,
+       "Crossing order should produce acceptance, trade, and market data");
 
     const auto* accepted =
         std::get_if<exchange::OrderAccepted>(&events[0]);
@@ -67,6 +76,18 @@ void test_trade_event()
     const auto* trade =
         std::get_if<exchange::Trade>(&events[1]);
 
+    const auto* top =
+    std::get_if<exchange::TopOfBookUpdate>(&events[2]);
+
+    expect(top != nullptr,
+        "Third event should be TopOfBookUpdate");
+
+    expect(!top->best_bid.has_value(),
+        "Book should have no bid after full fill");
+
+    expect(!top->best_ask.has_value(),
+        "Book should have no ask after full fill");
+        
     expect(trade != nullptr,
            "Second event should be Trade");
 
