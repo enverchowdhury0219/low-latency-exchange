@@ -389,4 +389,40 @@ OrderBook::replace(
 
 }
 
+std::optional<Quantity>
+OrderBook::best_bid_quantity() const
+{
+    if (bids_.empty())
+    {
+        return std::nullopt;
+    }
+
+    Quantity total = 0;
+
+    for (const auto& order : bids_.begin()->second)
+    {
+        total += order.quantity;
+    }
+
+    return total;
+}
+
+std::optional<Quantity>
+OrderBook::best_ask_quantity() const
+{
+    if (asks_.empty())
+    {
+        return std::nullopt;
+    }
+
+    Quantity total = 0;
+
+    for (const auto& order : asks_.begin()->second)
+    {
+        total += order.quantity;
+    }
+
+    return total;
+}
+
 }
