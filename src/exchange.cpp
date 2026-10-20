@@ -109,8 +109,8 @@ TopOfBookUpdate
 Exchange::top_of_book() const{
     return {
         book_.best_bid(),
-        book_.best_ask(),
         book_.best_bid_quantity(),
+        book_.best_ask(),
         book_.best_ask_quantity()
     };
 }
