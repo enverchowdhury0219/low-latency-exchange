@@ -57,6 +57,12 @@ private:
     [[nodiscard]] RejectReason
     validate_order(const Order& order) const;
 
+    // added our best price quantities for both buy and sell
+    [[nodiscard]] std::optional<Quantity>
+    best_bid_quantity() const;
+
+    [[nodiscard]] std::optional<Quantity>
+    best_ask_quantity() const;
     
     void add_order(const Order& order);
    
