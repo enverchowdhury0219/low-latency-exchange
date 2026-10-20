@@ -48,7 +48,11 @@ struct ReplaceRejected
 struct TopOfBookUpdate
 {
     std::optional<Price> best_bid;
+    std::optional<Quantity> best_bid_quantity;
+
     std::optional<Price> best_ask;
+    std::optional<Quantity> best_ask_quantity;
+
 };
   
 // we use variant here to say that this object contains exactly one valid event type
