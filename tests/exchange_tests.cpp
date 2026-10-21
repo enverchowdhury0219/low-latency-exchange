@@ -310,6 +310,7 @@ int main()
         test_cancel_event();
         test_cancel_rejected_event();
         test_replace_trade_events();
+        test_top_of_book_quantities();
 
         std::cout << "All exchange tests passed.\n";
         return 0;
