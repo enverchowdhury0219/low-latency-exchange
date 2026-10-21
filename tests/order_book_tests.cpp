@@ -616,6 +616,7 @@ void test_replace_zero_quantity()
            "Failed replace must not modify original order");
 }
 
+
 // running tests to ensure they pass at all times
 int main()
 {

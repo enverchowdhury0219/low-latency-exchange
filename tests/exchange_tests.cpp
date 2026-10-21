@@ -241,6 +241,65 @@ void test_replace_trade_events()
            "Trade quantity should be 100");
 }
 
+void test_top_of_book_quantities()
+{
+    exchange::Exchange exchange;
+
+    (void)exchange.submit({
+        1,
+        10125,
+        100,
+        exchange::Side::Buy
+    });
+
+    (void)exchange.submit({
+        2,
+        10125,
+        75,
+        exchange::Side::Buy
+    });
+
+    const auto events = exchange.submit({
+        3,
+        10130,
+        200,
+        exchange::Side::Sell
+    });
+
+    expect(events.size() == 2,
+           "Resting sell should produce acceptance and market data");
+
+    const auto* top =
+        std::get_if<exchange::TopOfBookUpdate>(&events[1]);
+
+    expect(top != nullptr,
+           "Second event should be TopOfBookUpdate");
+
+    expect(top->best_bid.has_value(),
+           "Best bid should exist");
+
+    expect(top->best_bid_quantity.has_value(),
+           "Best bid quantity should exist");
+
+    expect(*top->best_bid == 10125,
+           "Best bid should be 10125");
+
+    expect(*top->best_bid_quantity == 175,
+           "Best bid quantity should aggregate to 175");
+
+    expect(top->best_ask.has_value(),
+           "Best ask should exist");
+
+    expect(top->best_ask_quantity.has_value(),
+           "Best ask quantity should exist");
+
+    expect(*top->best_ask == 10130,
+           "Best ask should be 10130");
+
+    expect(*top->best_ask_quantity == 200,
+           "Best ask quantity should be 200");
+}
+
 int main()
 {
     try
