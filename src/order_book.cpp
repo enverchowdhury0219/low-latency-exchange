@@ -11,12 +11,14 @@ void OrderBook::add_order(const Order& order)
 {
     if (order.side == Side::Buy)
     {
-        auto& orders = bids_[order.price];
+        auto& level = bids_[order.price];
 
-        auto order_it = orders.insert(
-            orders.end(),
+        auto order_it = level.orders.insert(
+            level.orders.end(),
             order
         );
+
+        level.total_quantity += order.quantity
 
         // inserts order at the end - preserves time priority
         // also returns interator pointing to inserted order

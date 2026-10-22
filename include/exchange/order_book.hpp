@@ -62,10 +62,10 @@ private:
 
     // third parameter here is the comparison function used to sort keys
     using BidLevels =
-        std::map<Price, OrdersAtPrice, std::greater<Price>>; // we want the highest bid 
+        std::map<Price, PriceLevel, std::greater<Price>>; // we want the highest bid 
 
     using AskLevels =
-        std::map<Price, OrdersAtPrice, std::less<Price>>; // we want the lowest ask
+        std::map<Price, PriceLevel, std::less<Price>>; // we want the lowest ask
 
     [[nodiscard]] RejectReason
     validate_order(const Order& order) const;
