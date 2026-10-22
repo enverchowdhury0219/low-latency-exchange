@@ -57,7 +57,7 @@ private:
     struct PriceLevel
     {
         OrdersAtPrice orders;
-        Quantity total_quantity{0};
+        Quantity total_quantity{0}; // initialize total_quantity to 0 when new PriceLevel obj created
     };
 
     // third parameter here is the comparison function used to sort keys
