@@ -34,12 +34,14 @@ void OrderBook::add_order(const Order& order)
         return;
     }
     
-    auto& orders = asks_[order.price];
+    auto& level = asks_[order.price];
 
-    auto order_it = orders.insert(
-        orders.end(),
+    auto order_it = level.orders.insert(
+        level.orders.end(),
         order
     );
+
+    level.total_quantity += order.quantity;
 
     order_locations_.insert({
             order.id,
