@@ -54,6 +54,12 @@ public:
 private:
     using OrdersAtPrice = std::list<Order>;
 
+    struct PriceLevel
+    {
+        OrdersAtPrice orders;
+        Quantity total_quantity{0};
+    };
+
     // third parameter here is the comparison function used to sort keys
     using BidLevels =
         std::map<Price, OrdersAtPrice, std::greater<Price>>; // we want the highest bid 
