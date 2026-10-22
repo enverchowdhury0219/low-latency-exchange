@@ -401,14 +401,7 @@ OrderBook::best_bid_quantity() const
         return std::nullopt;
     }
 
-    Quantity total = 0;
-
-    for (const auto& order : bids_.begin()->second)
-    {
-        total += order.quantity;
-    }
-
-    return total;
+    return bids_.begin()->second.total_quantity;
 }
 
 std::optional<Quantity>
@@ -419,14 +412,8 @@ OrderBook::best_ask_quantity() const
         return std::nullopt;
     }
 
-    Quantity total = 0;
+    return asks_.begin()->second.total_quantity;
 
-    for (const auto& order : asks_.begin()->second)
-    {
-        total += order.quantity;
-    }
-
-    return total;
 }
 
 }
