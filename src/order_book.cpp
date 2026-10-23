@@ -132,7 +132,7 @@ OrderBook::execute_one(Order& incoming)
         auto ask_level = asks_.begin();
 
         // implements the time part of price-time priority
-        auto& resting_order = ask_level -> second.front();
+        auto& resting_order = ask_level -> second.orders.front();
 
         const Quantity traded_quantity =
             std::min(incoming.quantity, resting_order.quantity);
@@ -144,6 +144,7 @@ OrderBook::execute_one(Order& incoming)
             traded_quantity
         };
 
+        ask_level->second.total_quantity -= traded_quantity;
         incoming.quantity -= traded_quantity;
         resting_order.quantity -= traded_quantity;
 
@@ -154,10 +155,10 @@ OrderBook::execute_one(Order& incoming)
             order_locations_.erase(resting_order.id);
             
             // price-time priority, getting rid of the earliest order (deque front)
-            ask_level -> second.pop_front();
+            ask_level -> second.orders.pop_front();
 
             // if the price level is empty, then useless
-            if (ask_level->second.empty())
+            if (ask_level->second..orders.empty())
             {
                 asks_.erase(ask_level);
             }
@@ -169,7 +170,7 @@ OrderBook::execute_one(Order& incoming)
     // if the incoming order is a sell
     auto bid_level = bids_.begin();
 
-    auto& resting_order = bid_level -> second.front();
+    auto& resting_order = bid_level -> second.orders.front();
 
     const Quantity traded_quantity =
         std::min(incoming.quantity, resting_order.quantity);
@@ -181,6 +182,8 @@ OrderBook::execute_one(Order& incoming)
         traded_quantity
     };
 
+    bid_level->second.total_quantity -= traded_quantity;
+
     incoming.quantity -= traded_quantity;
     resting_order.quantity -= traded_quantity;
 
@@ -188,9 +191,9 @@ OrderBook::execute_one(Order& incoming)
         
         order_locations_.erase(resting_order.id);
         
-        bid_level -> second.pop_front();
+        bid_level -> second.orders.pop_front();
 
-        if (bid_level -> second.empty()){
+        if (bid_level -> second.orders.empty()){
             bids_.erase(bid_level);
         }
     }
