@@ -18,7 +18,7 @@ void OrderBook::add_order(const Order& order)
             order
         );
 
-        level.total_quantity += order.quantity
+        level.total_quantity += order.quantity;
 
         // inserts order at the end - preserves time priority
         // also returns interator pointing to inserted order
@@ -158,7 +158,7 @@ OrderBook::execute_one(Order& incoming)
             ask_level -> second.orders.pop_front();
 
             // if the price level is empty, then useless
-            if (ask_level->second..orders.empty())
+            if (ask_level->second.orders.empty())
             {
                 asks_.erase(ask_level);
             }
@@ -295,10 +295,11 @@ bool OrderBook::cancel(OrderId id)
             return false; // not in the book so cant cancel
         }
 
-        level -> second.erase(location.order);
+        level->second.total_quantity -= location.order->quantity;
+        level -> second.orders.erase(location.order);
         order_locations_.erase(location_it);
 
-        if (level -> second.empty())
+        if (level -> second.orders.empty())
         {
             bids_.erase(level);
         }
@@ -314,10 +315,10 @@ bool OrderBook::cancel(OrderId id)
         return false;
     }
     
-    level -> second.erase(location.order);
+    level -> second.orders.erase(location.order);
     order_locations_.erase(location_it);
 
-    if (level -> second.empty())
+    if (level -> second.orders.empty())
     {
         asks_.erase(level);
     }
