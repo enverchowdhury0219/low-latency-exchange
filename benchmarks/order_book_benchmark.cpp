@@ -4,6 +4,8 @@
 
 #include "exchange/order_book.hpp"
 
+// we are testing time taken to submit 100,000 orders
+// and we do time (nanoseconds) / # orders to get ns/order
 int main()
 {
     exchange::OrderBook book;
