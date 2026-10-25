@@ -13,7 +13,7 @@ int main()
     const auto start =
         std::chrono::steady_clock::now();
 
-    for (std::uint64_t = 1; i <= iterations; i++)
+    for (std::uint64_t i = 1; i <= iterations; i++)
     {
         (void)book.submit({
             i,
@@ -31,7 +31,14 @@ int main()
             end - start
         ).count();
 
-    const double_ns_per_order = 
+    const double ns_per_order = 
+        static_cast<double>(elapsed) / iterations;
 
-    
+    std::cout << "Orders: " << iterations << '\n';
+    std::cout << "Total time: " << elapsed << " ns\n";
+    std::cout << "Average: " << ns_per_order
+              << " ns/order\n";
+
+    return 0;
+        
 }
