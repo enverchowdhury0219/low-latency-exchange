@@ -4,70 +4,132 @@
 
 #include "exchange/order_book.hpp"
 
-// our first benchmark - which is the process of measuring the exact performance/execution time
-// of the code i.e. a highly precise digital stopwatch timing our CPU
+using Clock = std::chrono::steady_clock;
 
-// we are testing time taken to submit 100,000 orders
-// and we do time (nanoseconds) / # orders to get ns/order
+constexpr std::uint64_t iterations = 100000;
 
-// Baseline — resting BUY insertion
-// 100,000 orders
-// 100 price levels
-// Release build
-// ~79 ns/order
-// ~12.65M orders/sec
-int main()
+void print_result(
+    const char* name,
+    std::int64_t elapsed_ns
+)
+{
+    const double ns_per_operation =
+        static_cast<double>(elapsed_ns) / iterations;
+
+    const double operations_per_second =
+        1'000'000'000.0 / ns_per_operation;
+
+    std::cout << "\n" << name << '\n';
+    std::cout << "Operations: " << iterations << '\n';
+    std::cout << "Total: " << elapsed_ns << " ns\n";
+    std::cout << "Average: "
+              << ns_per_operation
+              << " ns/op\n";
+    std::cout << "Throughput: "
+              << operations_per_second
+              << " ops/sec\n";
+}
+
+void benchmark_resting_inserts()
 {
     exchange::OrderBook book;
 
-    // uint64_t - exact width unsigned 64 bit integer defined in <cstdint>
-    // constexpr - specifier telling compiler that variable can potentially be evaluated at compile time
-    constexpr std::uint64_t iterations = 100000;
+    const auto start = Clock::now();
 
-    const auto start =
-        std::chrono::steady_clock::now();
-
-    for (std::uint64_t i = 1; i <= iterations; i++)
+    for (std::uint64_t i = 1; i <= iterations; ++i)
     {
         (void)book.submit({
             i,
-            // static_cast - compile-time type conversion to safely transform underlying tick count
-            // of a duration into a uint64_t
             10000 + static_cast<exchange::Price>(i % 100),
             100,
             exchange::Side::Buy
         });
     }
 
-    // chrono - standard c++ library for date and time uses
-    // steady_clock - monotinic clock whose time points are guarateed to never move backward,
-    // so ideal here for benchmarking.
-    // steady_clock::now() - static member function returning a time_point representing current time of steady clock
-    const auto end =
-        std::chrono::steady_clock::now();
+    const auto end = Clock::now();
 
-        // duration_cast<ToDuration> - explicit conversion function returning a required when converting to
-        // a duration to a different precision (scaling up/down) to prevent unintended data loss
     const auto elapsed =
         std::chrono::duration_cast<std::chrono::nanoseconds>(
             end - start
         ).count();
 
-    const double ns_per_order = 
-        static_cast<double>(elapsed) / iterations;
+    print_result("Resting inserts", elapsed);
+}
 
-    const double orders_per_second =
-        1'000'000'000.0 / ns_per_order; 
+void benchmark_matching()
+{
+    exchange::OrderBook book;
 
-    std::cout << "Throughput: "
-          << orders_per_second
-          << " orders/second\n"; 
+    // Setup is intentionally outside the timed region.
+    for (std::uint64_t i = 1; i <= iterations; ++i)
+    {
+        (void)book.submit({
+            i,
+            10100,
+            100,
+            exchange::Side::Sell
+        });
+    }
 
-    std::cout << "Orders: " << iterations << '\n';
-    std::cout << "Total time: " << elapsed << " ns\n";
-    std::cout << "Average: " << ns_per_order
-              << " ns/order\n";
+    const auto start = Clock::now();
+
+    for (std::uint64_t i = 1; i <= iterations; ++i)
+    {
+        (void)book.submit({
+            iterations + i,
+            10100,
+            100,
+            exchange::Side::Buy
+        });
+    }
+
+    const auto end = Clock::now();
+
+    const auto elapsed =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(
+            end - start
+        ).count();
+
+    print_result("Matching", elapsed);
+}
+
+void benchmark_cancellation()
+{
+    exchange::OrderBook book;
+
+    // Again, setup is not timed.
+    for (std::uint64_t i = 1; i <= iterations; ++i)
+    {
+        (void)book.submit({
+            i,
+            10000,
+            100,
+            exchange::Side::Buy
+        });
+    }
+
+    const auto start = Clock::now();
+
+    for (std::uint64_t i = 1; i <= iterations; ++i)
+    {
+        (void)book.cancel(i);
+    }
+
+    const auto end = Clock::now();
+
+    const auto elapsed =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(
+            end - start
+        ).count();
+
+    print_result("Cancellation", elapsed);
+}
+
+int main()
+{
+    benchmark_resting_inserts();
+    benchmark_matching();
+    benchmark_cancellation();
 
     return 0;
-        
 }
