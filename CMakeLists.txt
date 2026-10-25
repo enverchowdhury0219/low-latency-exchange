@@ -100,3 +100,22 @@ add_test(
     NAME exchange_tests
     COMMAND exchange_tests
 )
+
+add_executable(
+    order_book_benchmark
+    benchmark/order_book_benchmark.cpp
+)
+
+target_link_libraries(
+    order_book_benchmark
+    PRIVATE
+        exchange_core
+)
+
+target_compile_options(
+    order_book_benchmark
+    PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
+)
