@@ -65,7 +65,7 @@ void benchmark_matching()
 {
     exchange::OrderBook book;
 
-    // Setup is intentionally outside the timed region.
+    // setup is intentionally outside the timed region
     for (std::uint64_t i = 1; i <= iterations; ++i)
     {
         (void)book.submit({
@@ -102,7 +102,7 @@ void benchmark_cancellation()
 {
     exchange::OrderBook book;
 
-    // Again, setup is not timed.
+    // once again, the setup is not timed.
     for (std::uint64_t i = 1; i <= iterations; ++i)
     {
         (void)book.submit({
