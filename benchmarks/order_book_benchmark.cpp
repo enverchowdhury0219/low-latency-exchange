@@ -9,6 +9,13 @@
 
 // we are testing time taken to submit 100,000 orders
 // and we do time (nanoseconds) / # orders to get ns/order
+
+// Baseline — resting BUY insertion
+// 100,000 orders
+// 100 price levels
+// Release build
+// ~79 ns/order
+// ~12.65M orders/sec
 int main()
 {
     exchange::OrderBook book;
@@ -48,6 +55,13 @@ int main()
 
     const double ns_per_order = 
         static_cast<double>(elapsed) / iterations;
+
+    const double orders_per_second =
+        1'000'000'000.0 / ns_per_order; 
+
+    std::cout << "Throughput: "
+          << orders_per_second
+          << " orders/second\n"; 
 
     std::cout << "Orders: " << iterations << '\n';
     std::cout << "Total time: " << elapsed << " ns\n";

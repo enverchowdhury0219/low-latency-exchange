@@ -103,7 +103,7 @@ add_test(
 
 add_executable(
     order_book_benchmark
-    benchmark/order_book_benchmark.cpp
+    benchmarks/order_book_benchmark.cpp
 )
 
 target_link_libraries(
