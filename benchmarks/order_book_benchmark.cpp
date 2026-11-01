@@ -9,6 +9,10 @@
 // 1. resting order insertion
 // 2. crossing/matching
 // 3. cancellation
+
+// we then ran these multiple times to get a better idea of how fast our orderbook can perform
+// certain operations at scale
+
 using Clock = std::chrono::steady_clock;
 
 constexpr std::uint64_t iterations = 100000;
