@@ -1,6 +1,8 @@
 #include <chrono>
 #include <cstdint>
 #include <iostream>
+#include <algorithm>
+#include <vector>
 
 #include "exchange/order_book.hpp"
 
@@ -132,6 +134,27 @@ void benchmark_cancellation()
         ).count();
 
     print_result("Cancellation", elapsed);
+}
+
+// helper function to print percentiles
+void print_percentiles(
+    std::vector<std::int64_t>& latencies
+)
+{
+    std::sort(latencies.begin(), latencies.end());
+
+    const auto p50 =
+        latencies[latencies.size() * 50 / 100];
+
+    const auto p95 =
+        latencies[latencies.size() * 95 / 100];
+
+    const auto p99 =
+        latencies[latencies.size() * 99 / 100];
+
+    std::cout << "p50: " << p50 << " ns\n";
+    std::cout << "p95: " << p95 << " ns\n";
+    std::cout << "p99: " << p99 << " ns\n";
 }
 
 int main()
