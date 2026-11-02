@@ -157,6 +157,39 @@ void print_percentiles(
     std::cout << "p99: " << p99 << " ns\n";
 }
 
+// adding our percentile benchmark
+void benchmark_resting_insert_latency()
+{
+    exchange::OrderBook book;
+
+    std::vector<std::int64_t> latencies;
+    latencies.reserve(iterations);
+
+    for (std::uint64_t i = 1; i <= iterations; ++i)
+    {
+        const auto start = Clock::now();
+
+        (void)book.submit({
+            i,
+            10000 + static_cast<exchange::Price>(i % 100),
+            100,
+            exchange::Side::Buy
+        });
+
+        const auto end = Clock::now();
+
+        const auto elapsed =
+            std::chrono::duration_cast<std::chrono::nanoseconds>(
+                end - start
+            ).count();
+
+        latencies.push_back(elapsed);
+    }
+
+    std::cout << "\nResting insert latency percentiles\n";
+    print_percentiles(latencies);
+}
+
 int main()
 {
     benchmark_resting_inserts();
