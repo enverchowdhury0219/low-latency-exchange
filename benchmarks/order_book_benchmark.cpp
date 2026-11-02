@@ -196,5 +196,7 @@ int main()
     benchmark_matching();
     benchmark_cancellation();
 
+    benchmark_resting_insert_latency();
+
     return 0;
 }
