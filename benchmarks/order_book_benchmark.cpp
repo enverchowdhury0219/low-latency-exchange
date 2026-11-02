@@ -158,6 +158,14 @@ void print_percentiles(
 }
 
 // adding our percentile benchmark
+// sample results interpretation:
+// p50: 80 ns
+// p95: 110 ns
+// p99: 160 ns
+// p50: half of measured orders completed within 80 ns
+// p95: 95% completed within 110 ns
+// p99: 99% completed within 160 ns
+
 void benchmark_resting_insert_latency()
 {
     exchange::OrderBook book;
