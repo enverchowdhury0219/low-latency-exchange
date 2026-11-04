@@ -223,9 +223,9 @@ void benchmark_clock_overhead()
     print_percentiles(latencies);
 }
 
-// to offset the measurement overhead as much as we can, we can measure orders
-// in batches
-
+// to offset the measurement overhead as much as we can, we can measure in batches
+// now the testing order is:
+// clock -> 64 orders -> clock -> divide elapsed by 64
 void benchamrk_batched_insert_latency()
 {
     constexpr std::uint64_t batch_size = 64;
