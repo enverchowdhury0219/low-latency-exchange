@@ -199,12 +199,14 @@ void benchmark_resting_insert_latency()
 }
 
 // adding a benchmark to measure the the measurement overhead itself
+// so essentially seeing how much time the clock actually takes itself to
+// better recalibrate the actual time orders take
 void benchmark_clock_overhead()
 {
     std::vector<std::int64_t> latencies;
     latencies.reserve(iterations);
 
-    for (std::int64_t i = 0; i < iterations; ++i)
+    for (std::uint64_t i = 0; i < iterations; ++i)
     {
         const auto start = Clock::now();
         const auto end = Clock::now();
@@ -229,6 +231,7 @@ int main()
     benchmark_clock_overhead();
 
     benchmark_resting_insert_latency();
+    benchmark_clock_overhead();
 
     return 0;
 }
