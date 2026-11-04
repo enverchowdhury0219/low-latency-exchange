@@ -245,9 +245,43 @@ void benchamrk_batched_insert_latency()
     {
         const auto start = Clock::now();
 
-        
-    }
-}
+         for (std::uint64_t i = 0;
+             i < batch_size;
+             ++i)
+        {
+            (void)book.submit({
+                order_id,
+                10000 +
+                    static_cast<exchange::Price>(
+                        order_id % 100
+                    ),
+                100,
+                exchange::Side::Buy
+            });
+
+            ++order_id;
+        }
+
+            const auto end = Clock::now();
+
+            const auto elapsed =
+                std::chrono::duration_cast<
+                    std::chrono::nanoseconds
+                >(end - start).count();
+
+            const auto ns_per_order =
+                elapsed /
+                static_cast<std::int64_t>(batch_size);
+
+                latencies.push_back(ns_per_order);
+            }
+        std::cout
+            << "\nBatched resting insert latency\n";
+
+        print_percentiles(latencies);
+}   
+
+
 
 int main()
 {
