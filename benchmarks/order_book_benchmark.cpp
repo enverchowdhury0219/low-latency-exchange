@@ -293,6 +293,7 @@ int main()
 
     benchmark_resting_insert_latency();
     benchmark_clock_overhead();
+    benchamrk_batched_insert_latency();
 
     return 0;
 }
