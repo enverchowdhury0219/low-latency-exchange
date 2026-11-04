@@ -226,6 +226,7 @@ int main()
     benchmark_resting_inserts();
     benchmark_matching();
     benchmark_cancellation();
+    benchmark_clock_overhead();
 
     benchmark_resting_insert_latency();
 
