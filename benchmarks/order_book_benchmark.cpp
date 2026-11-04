@@ -262,19 +262,21 @@ void benchamrk_batched_insert_latency()
             ++order_id;
         }
 
-            const auto end = Clock::now();
+        const auto end = Clock::now();
 
-            const auto elapsed =
-                std::chrono::duration_cast<
-                    std::chrono::nanoseconds
-                >(end - start).count();
+        const auto elapsed =
+            std::chrono::duration_cast<
+                std::chrono::nanoseconds
+            >(end - start).count();
 
-            const auto ns_per_order =
-                elapsed /
-                static_cast<std::int64_t>(batch_size);
+        const auto ns_per_order =
+            elapsed /
+            static_cast<std::int64_t>(batch_size);
 
-                latencies.push_back(ns_per_order);
-            }
+        latencies.push_back(ns_per_order);
+
+    }
+
         std::cout
             << "\nBatched resting insert latency\n";
 
