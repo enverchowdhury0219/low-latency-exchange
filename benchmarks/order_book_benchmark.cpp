@@ -198,6 +198,13 @@ void benchmark_resting_insert_latency()
     print_percentiles(latencies);
 }
 
+// adding a benchmark to measure the the measurement overhead itself
+void benchmark_clock_overhead()
+{
+    std::vector<std::int64_t> latencies;
+    latencies.reserve
+}
+
 int main()
 {
     benchmark_resting_inserts();
