@@ -228,7 +228,16 @@ void benchmark_clock_overhead()
 
 void benchamrk_batched_insert_latency()
 {
-    constexpr
+    constexpr std::uint64_t batch_size = 64;
+    constexpr std::uint64_t batch_count =
+        iterations / batch_size;
+
+    exchange::OrderBook book;
+
+    std::vector<std::int64_t> latencies;
+    latencies.reserve(batch_count);
+
+    std::uint64_t
 }
 
 int main()
