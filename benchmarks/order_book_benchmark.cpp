@@ -223,6 +223,14 @@ void benchmark_clock_overhead()
     print_percentiles(latencies);
 }
 
+// to offset the measurement overhead as much as we can, we can measure orders
+// in batches
+
+void benchamrk_batched_insert_latency()
+{
+    constexpr
+}
+
 int main()
 {
     benchmark_resting_inserts();
