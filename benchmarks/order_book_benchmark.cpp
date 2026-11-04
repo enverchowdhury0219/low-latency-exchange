@@ -202,7 +202,20 @@ void benchmark_resting_insert_latency()
 void benchmark_clock_overhead()
 {
     std::vector<std::int64_t> latencies;
-    latencies.reserve
+    latencies.reserve(iterations);
+
+    for (std::int64_t i = 0; i < iterations; ++i)
+    {
+        const auto start = Clock::now();
+        const auto end = Clock::now();
+
+        const auto elapsed =
+            std::chrono::duration_cast<std::chrono::nanoseconds>(
+                end - start
+            ).count();
+
+        latencies.push_back(elapsed);
+    }
 }
 
 int main()
