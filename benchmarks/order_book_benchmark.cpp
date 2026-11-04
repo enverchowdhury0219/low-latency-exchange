@@ -216,6 +216,9 @@ void benchmark_clock_overhead()
 
         latencies.push_back(elapsed);
     }
+
+    std::cout << "\nClock measurement overhead\n";
+    print_percentiles(latencies);
 }
 
 int main()
