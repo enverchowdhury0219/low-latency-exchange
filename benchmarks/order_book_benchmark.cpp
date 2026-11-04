@@ -237,7 +237,16 @@ void benchamrk_batched_insert_latency()
     std::vector<std::int64_t> latencies;
     latencies.reserve(batch_count);
 
-    std::uint64_t
+    std::uint64_t order_id = 1;
+
+    for (std::uint64_t batch = 0;
+            batch < batch_count;
+            ++batch)
+    {
+        const auto start = Clock::now();
+
+        
+    }
 }
 
 int main()
