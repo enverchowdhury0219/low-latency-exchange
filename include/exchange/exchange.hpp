@@ -4,6 +4,7 @@
 
 #include "exchange/event.hpp"
 #include "exchange/order_book.hpp"
+#include "exchange/stats.hpp"
 
 namespace exchange
 {
@@ -25,11 +26,18 @@ public:
         Quantity new_quantity
     );
 
+    // adding a public accessor
+    [[nodiscard]] const ExchangeStats&
+    stats() const;
+
 private:
     [[nodiscard]] TopOfBookUpdate
     top_of_book() const;
     
     OrderBook book_;
+
+    // privately storing our stats inside Exchange
+    ExchangeStats stats_;
 
 
 };
