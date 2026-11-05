@@ -9,7 +9,8 @@ Exchange::submit(Order order)
     std::vector<ExchangeEvent> events;
 
     const auto result = book_.submit(order);
-
+    ++stats_.orders_submitted;
+    
     if (!result.accepted)
     {
         // .push_back is a vector function to add new element to end of container
@@ -21,6 +22,7 @@ Exchange::submit(Order order)
             }
         );
 
+        ++stats_.orders_rejected;
         return events;
     }
 
@@ -31,8 +33,13 @@ Exchange::submit(Order order)
         }
     );
 
+    ++stats_.orders_accepted;
+
     for (const auto& trade : result.trades)
     {
+        ++stats_.trades_executed;
+        stats_.traded_quantity += trade.quantity;
+        
         // logging each trade that takes place as an event
         events.push_back(trade);
     }
