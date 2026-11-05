@@ -39,7 +39,7 @@ Exchange::submit(Order order)
     {
         ++stats_.trades_executed;
         stats_.traded_quantity += trade.quantity;
-        
+
         // logging each trade that takes place as an event
         events.push_back(trade);
     }
@@ -59,6 +59,7 @@ Exchange::cancel(OrderId id)
         events.push_back(
             OrderCancelled{id}
         );
+        ++stats_.cancels_accepted;
 
         events.push_back(top_of_book());
     }
@@ -67,6 +68,7 @@ Exchange::cancel(OrderId id)
         events.push_back(
             CancelRejected{id}
         );
+        ++stats_.cancels_rejected;
     }
 
     return events;
@@ -92,6 +94,7 @@ Exchange::replace(
                 result.reject_reason
             }
         );
+        ++stats_.replaces_rejected;
 
         return events;
     }
@@ -99,9 +102,12 @@ Exchange::replace(
     events.push_back(
         OrderReplaced{id}
     );
+    ++stats_.replaces_accepted;
 
     for (const auto& trade : result.trades)
     {
+        ++stats_.trades_executed;
+        stats_.traded_quantity += trade.quantity;
         events.push_back(trade);
     }
    
