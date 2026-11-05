@@ -115,4 +115,12 @@ Exchange::top_of_book() const{
     };
 }
 
+// we return ExchangeStats& because we are giving caller
+// read-only reference
+const ExchangeStats&
+Exchange::stats() const
+{
+    return stats_;
+}
+
 }
