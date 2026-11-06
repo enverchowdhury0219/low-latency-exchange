@@ -300,6 +300,7 @@ void test_top_of_book_quantities()
            "Best ask quantity should be 200");
 }
 
+// making sure our ExchangeStats variable keeps record of events
 void test_exchange_stats()
 {
     exchange::Exchange exchange;
