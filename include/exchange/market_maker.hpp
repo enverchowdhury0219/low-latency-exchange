@@ -5,7 +5,7 @@
 namespace exchange
 {
 
-struct Quite
+struct Quote
 {
     Price bid_price;
     Price ask_price;
@@ -17,5 +17,12 @@ public:
     MarketMaker(
         Price half_spread
     );
-}
+
+    [[nodiscard]] Quote
+    make_quote(Price fair_value) const;
+
+private:
+    Price half_spread_;
+};
+
 }
