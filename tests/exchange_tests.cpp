@@ -300,6 +300,13 @@ void test_top_of_book_quantities()
            "Best ask quantity should be 200");
 }
 
+void test_exchange_stats()
+{
+    exchange::Exchange exchange;
+
+    
+}
+
 int main()
 {
     try
