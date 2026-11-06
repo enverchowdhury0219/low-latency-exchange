@@ -304,7 +304,48 @@ void test_exchange_stats()
 {
     exchange::Exchange exchange;
 
-    
+    (void)exchange.submit({
+        1,
+        10130,
+        100,
+        exchange::Side::Sell
+    });
+
+    (void)exchange.submit({
+        2,
+        10140,
+        100,
+        exchange::Side::Buy
+    });
+
+    (void)exchange.submit({
+        0,
+        10120,
+        100,
+        exchange::Side::Buy
+    });
+
+    (void)exchange.cancel(999);
+
+    const auto& stats = exchange.stats();
+
+    expect(stats.orders_submitted == 3,
+           "Three orders should have been submitted");
+
+    expect(stats.orders_accepted == 2,
+           "Two orders should have been accepted");
+
+    expect(stats.orders_rejected == 1,
+           "One order should have been rejected");
+
+    expect(stats.trades_executed == 1,
+           "One trade should have executed");
+
+    expect(stats.traded_quantity == 100,
+           "Total traded quantity should be 100");
+
+    expect(stats.cancels_rejected == 1,
+           "One cancel should have been rejected");
 }
 
 int main()
