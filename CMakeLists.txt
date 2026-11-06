@@ -16,6 +16,7 @@ add_library(
     exchange_core
     src/order_book.cpp
     src/exchange.cpp
+    src/market_maker.cpp
 )
 
 target_include_directories(
