@@ -120,3 +120,21 @@ target_compile_options(
         -Wextra
         -Wpedantic
 )
+
+add_executable(
+    market_maker_tests
+    tests/market_maker_tests.cpp
+)
+
+target_link_libraries(
+    market_maker_tests
+    PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
+)
+
+add_test(
+    NAME market_maker_tests
+    COMMAND market_maker_tests
+)
