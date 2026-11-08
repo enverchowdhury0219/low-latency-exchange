@@ -1,0 +1,50 @@
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+#include "exchange/market_maker.hpp"
+
+void expect(bool condition, const std::string& message)
+{
+    if (!condition)
+    {
+        throw std::runtime_error(message);
+    }
+}
+
+void test_basic_quote()
+{
+    // defining our half spread as 5
+    exchange::MarketMaker maker{5};
+
+    const auto quote =
+        maker.make_quote(10100);
+
+    expect(quote.bid_price == 10095,
+           "Bid should be 5 ticks below fair value");
+
+    expect(quote.ask_price == 10105,
+           "Ask should be 5 ticks above fair value");
+}
+
+int main()
+{
+    try
+    {
+        test_basic_quote();
+
+        std::cout
+            << "All market maker tests passed.\n";
+
+        return 0;
+    }
+    catch (const std::exception& error)
+    {
+        std::cerr
+            << "TEST FAILED: "
+            << error.what()
+            << '\n';
+
+        return 1;
+    }
+}
