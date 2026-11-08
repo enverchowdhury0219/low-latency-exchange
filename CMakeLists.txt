@@ -129,6 +129,12 @@ add_executable(
 target_link_libraries(
     market_maker_tests
     PRIVATE
+        exchange_core
+)
+
+target_compile_options(
+    market_maker_tests
+    PRIVATE
         -Wall
         -Wextra
         -Wpedantic
