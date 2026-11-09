@@ -14,6 +14,7 @@ struct Quote
 class MarketMaker
 {
 public:
+    // inventory is net position of assets that market maker holds on books currently.
     MarketMaker(
         Price half_spread,
         Price inventory_skew = 0
