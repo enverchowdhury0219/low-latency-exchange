@@ -7,11 +7,13 @@ namespace exchange
 // half_spread_ is member var stored in obj (the extra _ usually names private member vars)
 MarketMaker::MarketMaker(
     Price half_spread
+    Price inventory_skew
 )
     // : here starts memver initializer list
     // so when making this MarketMaker obj, init its half_spread_ using param half_spread
     // this direct init helps to avoid later work
-    : half_spread_(half_spread)
+    : half_spread_(half_spread),
+        inventory_skew_(inventory_skew)
 
 // this is our constructor body (req even if empty), empty bc we did what we needed to in initializer list
 {
@@ -21,11 +23,33 @@ MarketMaker::MarketMaker(
 Quote
 MarketMaker::make_quote(Price fair_value) const
 {
+    Price adjusted_fair_value = fair_value;
+
+    if (inventory_ > 0)
+    {
+        adjusted_fair_value -= inventory_skew_;
+    }
+    else if (inventory_ < 0)
+    {
+        adjusted_fair_value += inventory_skew_;
+    }
+
     // our Quote object
     return {
-        fair_value - half_spread_,
-        fair_value + half_spread_
+        adjusted_fair_value - half_spread_,
+        adjusted_fair_value + half_spread_
     };
 }
+
+void
+MarketMaker::set_inventory(
+    std::int64_t inventory
+)
+{
+    inventory_ = inventory;
+}
+
+std::int64_t
+
 
 }

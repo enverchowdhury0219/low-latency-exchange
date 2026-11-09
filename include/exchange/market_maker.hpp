@@ -23,6 +23,10 @@ public:
     [[nodiscard]] Quote
     make_quote(Price fair_value) const;
 
+    // we used a signed value because:
+    // inventory > 0 -> long
+    // inventory = 0 -> flat
+    // inventory < 0 -> short
     void set_inventory(std::int64_t inventory);
 
     [[nodiscard]] std::int64_t
