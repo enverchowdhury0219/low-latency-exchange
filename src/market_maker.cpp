@@ -17,7 +17,7 @@ MarketMaker::MarketMaker(
 
 // this is our constructor body (req even if empty), empty bc we did what we needed to in initializer list
 {
-}
+}   
 
 // read-only member function
 Quote
@@ -25,10 +25,12 @@ MarketMaker::make_quote(Price fair_value) const
 {
     Price adjusted_fair_value = fair_value;
 
+    // if long, we own too much, so shift down, so lower bid and ask
     if (inventory_ > 0)
     {
         adjusted_fair_value -= inventory_skew_;
     }
+    // if short, we do the opposite
     else if (inventory_ < 0)
     {
         adjusted_fair_value += inventory_skew_;
@@ -41,6 +43,7 @@ MarketMaker::make_quote(Price fair_value) const
     };
 }
 
+// to set inventory value
 void
 MarketMaker::set_inventory(
     std::int64_t inventory
@@ -48,8 +51,11 @@ MarketMaker::set_inventory(
 {
     inventory_ = inventory;
 }
-
+// to retrieve inventory value
 std::int64_t
-
+MarketMaker::inventory() const
+{
+    return inventory_;
+}
 
 }

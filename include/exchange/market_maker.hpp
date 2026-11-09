@@ -15,6 +15,8 @@ class MarketMaker
 {
 public:
     // inventory is net position of assets that market maker holds on books currently.
+    // inventory skew is the intentional shifting of bid and ask quotes away from the mid-price
+    // to incentivize trades that reduce a market's risky new position (q) back towards 0.
     MarketMaker(
         Price half_spread,
         Price inventory_skew = 0
