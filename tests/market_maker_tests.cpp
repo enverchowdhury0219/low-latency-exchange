@@ -72,6 +72,8 @@ int main()
     try
     {
         test_basic_quote();
+        test_long_inventory_skews_quote_down();
+        test_short_inventory_skews_quote_up();
 
         std::cout
             << "All market maker tests passed.\n";

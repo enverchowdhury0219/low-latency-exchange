@@ -6,7 +6,7 @@ namespace exchange
 // half_spread is the param passed into constructor
 // half_spread_ is member var stored in obj (the extra _ usually names private member vars)
 MarketMaker::MarketMaker(
-    Price half_spread
+    Price half_spread,
     Price inventory_skew
 )
     // : here starts memver initializer list
