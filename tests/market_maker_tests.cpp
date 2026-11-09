@@ -27,6 +27,46 @@ void test_basic_quote()
            "Ask should be 5 ticks above fair value");
 }
 
+void test_long_inventory_skews_quote_down()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.set_inventory(100);
+
+    const auto quote =
+        maker.make_quote(10100);
+
+    expect(
+        quote.bid_price == 10093,
+        "Long inventory should lower bid"
+    );
+
+    expect(
+        quote.ask_price == 10103,
+        "Long inventory should lower ask"
+    );
+}
+
+void test_short_inventory_skews_quote_up()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.set_inventory(-100);
+
+    const auto quote =
+        maker.make_quote(10100);
+
+    expect(
+        quote.bid_price == 10097,
+        "Short inventory should raise bid"
+    );
+
+    expect(
+        quote.ask_price == 10107,
+        "Short inventory should raise ask"
+    );
+}
+
 int main()
 {
     try
