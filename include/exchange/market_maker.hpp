@@ -31,13 +31,13 @@ public:
     // inventory < 0 -> short
     void set_inventory(std::int64_t inventory);
 
-    [[nodiscard]] std::int64_t
-    inventory() const;
-
     void on_fill(
         Side side,
         Quantity quantity
     );
+
+    [[nodiscard]] std::int64_t
+    inventory() const;
 
 private:
     Price half_spread_;

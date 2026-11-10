@@ -58,4 +58,22 @@ MarketMaker::inventory() const
     return inventory_;
 }
 
+void
+MarketMaker::on_fill(
+    Side side,
+    Quantity quantity
+)
+{
+    const auto signed_quantity =
+        static_cast<std::int64_t>(quantity);
+
+    if (side == Side::Buy)
+    {
+        inventory_ += signed_quantity;
+    }
+    else
+    {
+        inventory_ -= signed_quantity;
+    }
+}
 }
