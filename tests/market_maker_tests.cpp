@@ -67,6 +67,22 @@ void test_short_inventory_skews_quote_up()
     );
 }
 
+// testing that our fill works
+void test_buy_fill_increases_inventory()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.on_fill(
+        exchange::Side::Buy,
+        100
+    );
+
+    expect(
+        maker.inventory() == 100,
+        "Buy fill should increase inventory"
+    );
+}
+
 int main()
 {
     try

@@ -31,6 +31,7 @@ public:
     // inventory < 0 -> short
     void set_inventory(std::int64_t inventory);
 
+    // as our buy/sell can increase/decrease inventory
     void on_fill(
         Side side,
         Quantity quantity

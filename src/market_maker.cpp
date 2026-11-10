@@ -64,6 +64,8 @@ MarketMaker::on_fill(
     Quantity quantity
 )
 {
+    // we convert Quantity because it is unsigned, but inventory can be negative,
+    // so we convert quantities before subtracting them
     const auto signed_quantity =
         static_cast<std::int64_t>(quantity);
 
