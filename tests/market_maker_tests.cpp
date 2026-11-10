@@ -83,6 +83,21 @@ void test_buy_fill_increases_inventory()
     );
 }
 
+void test_sell_fill_decreases_inventory()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.on_fill(
+        exchange::Side::Sell,
+        75
+    );
+
+    expect(
+        maker.inventory() == -75,
+        "Sell fill should decrease inventory"
+    );
+}
+
 int main()
 {
     try
