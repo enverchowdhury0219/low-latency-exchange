@@ -129,6 +129,9 @@ int main()
         test_basic_quote();
         test_long_inventory_skews_quote_down();
         test_short_inventory_skews_quote_up();
+        test_buy_fill_increases_inventory();
+        test_sell_fill_decreases_inventory();
+        test_fills_affect_future_quotes();
 
         std::cout
             << "All market maker tests passed.\n";
