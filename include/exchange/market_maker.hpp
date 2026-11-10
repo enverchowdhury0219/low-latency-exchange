@@ -34,6 +34,11 @@ public:
     [[nodiscard]] std::int64_t
     inventory() const;
 
+    void on_fill(
+        Side side,
+        Quantity quantity
+    );
+
 private:
     Price half_spread_;
     Price inventory_skew_;
