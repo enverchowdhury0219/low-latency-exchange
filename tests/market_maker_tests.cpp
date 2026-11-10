@@ -98,6 +98,30 @@ void test_sell_fill_decreases_inventory()
     );
 }
 
+// testing whether our future quotes are affected properly
+void test_fills_affect_future_quotes()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.on_fill(
+        exchange::Side::Buy,
+        100
+    );
+
+    const auto quote =
+        maker.make_quote(10100);
+
+    expect(
+        quote.bid_price == 10093,
+        "Long inventory should lower future bid"
+    );
+
+    expect(
+        quote.ask_price == 10103,
+        "Long inventory should lower future ask"
+    );
+}
+
 int main()
 {
     try
