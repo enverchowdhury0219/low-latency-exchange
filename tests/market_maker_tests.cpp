@@ -182,6 +182,36 @@ void test_trade_on_ask_decreases_inventory()
     );
 }
 
+void test_unrelated_trade_does_not_change_inventory()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.set_active_orders(
+        1001,
+        1002
+    );
+
+    const exchange::Trade trade{
+        3000,
+        4000,
+        10100,
+        100
+    };
+
+    const bool involved =
+        maker.on_trade(trade);
+
+    expect(
+        !involved,
+        "Unrelated trade should be ignored"
+    );
+
+    expect(
+        maker.inventory() == 0,
+        "Unrelated trade should not change inventory"
+    );
+}
+
 int main()
 {
     try
