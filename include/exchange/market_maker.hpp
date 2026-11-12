@@ -24,14 +24,6 @@ public:
         Price inventory_skew = 0
     );
 
-    void set_active_orders(
-        OrderId bid_order_id,
-        OrderId ask_order_id
-    );
-
-    [[nodiscard]] bool
-    on_trade(const Trade& trade);
-
     [[nodiscard]] Quote
     make_quote(Price fair_value) const;
 
@@ -50,11 +42,22 @@ public:
     [[nodiscard]] std::int64_t
     inventory() const;
 
+    void set_active_orders(
+        OrderId bid_order_id,
+        OrderId ask_order_id
+    );
+
+    [[nodiscard]] bool
+    on_trade(const Trade& trade);
+
 private:
     Price half_spread_;
     Price inventory_skew_;
 
     std::int64_t inventory_{0};
+
+    std::optional<OrderId> bid_order_id_;
+    std::optional<OrderId> ask_order_id_;
 };
 
 }
