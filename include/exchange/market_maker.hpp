@@ -1,6 +1,8 @@
 #pragma once
 
+#include <optional>
 #include "exchange/order.hpp"
+#include "exchange/trade.hpp"
 
 namespace exchange
 {
@@ -21,6 +23,14 @@ public:
         Price half_spread,
         Price inventory_skew = 0
     );
+
+    void set_active_orders(
+        OrderId bid_order_id,
+        OrderId ask_order_id
+    );
+
+    [[nodiscard]] bool
+    on_trade(const Trade& trade);
 
     [[nodiscard]] Quote
     make_quote(Price fair_value) const;
