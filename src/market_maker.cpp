@@ -78,4 +78,15 @@ MarketMaker::on_fill(
         inventory_ -= signed_quantity;
     }
 }
+
+void
+MarketMaker::set_active_orders(
+    OrderId bid_order_id,
+    OrderId ask_order_id
+)
+{
+    bid_order_id_ = bid_order_id;
+    ask_order_id_ = ask_order_id;
+}
+
 }
