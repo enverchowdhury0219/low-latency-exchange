@@ -96,6 +96,7 @@ MarketMaker::on_trade(
 {
     bool involved = false;
 
+    // we check if its there because its optional and then extract its actual value
     if (
         bid_order_id_.has_value() &&
         trade.buy_order_id == *bid_order_id_

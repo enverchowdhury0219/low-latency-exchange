@@ -122,6 +122,66 @@ void test_fills_affect_future_quotes()
     );
 }
 
+void test_trade_on_bid_increases_inventory()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.set_active_orders(
+        1001,
+        1002
+    );
+
+    const exchange::Trade trade{
+        1001,
+        2000,
+        10095,
+        50
+    };
+
+    const bool involved =
+        maker.on_trade(trade);
+
+    expect(
+        involved,
+        "Market maker should recognize its bid trade"
+    );
+
+    expect(
+        maker.inventory() == 50,
+        "Bid fill should increase inventory"
+    );
+}
+
+void test_trade_on_ask_decreases_inventory()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.set_active_orders(
+        1001,
+        1002
+    );
+
+    const exchange::Trade trade{
+        2000,
+        1002,
+        10105,
+        40
+    };
+
+    const bool involved =
+        maker.on_trade(trade);
+
+    expect(
+        involved,
+        "Market maker should recognize its ask trade"
+    );
+
+    expect(
+        maker.inventory() == -40,
+        "Ask fill should decrease inventory"
+    );
+}
+
 int main()
 {
     try
