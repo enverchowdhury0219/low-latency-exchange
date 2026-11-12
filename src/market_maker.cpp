@@ -89,4 +89,40 @@ MarketMaker::set_active_orders(
     ask_order_id_ = ask_order_id;
 }
 
+bool
+MarketMaker::on_trade(
+    const Trade& trade
+)
+{
+    bool involved = false;
+
+    if (
+        bid_order_id_.has_value() &&
+        trade.buy_order_id == *bid_order_id_
+    )
+    {
+        on_fill(
+            Side::Buy,
+            trade.quantity
+        );
+
+        involved = true;
+    }
+
+    if (
+        ask_order_id_.has_value() &&
+        trade.sell_order_id == *ask_order_id_
+    )
+    {
+        on_fill(
+            Side::Sell,
+            trade.quantity
+        );
+
+        involved = true;
+    }
+
+    return involved;
+}
+
 }
