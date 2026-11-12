@@ -222,6 +222,9 @@ int main()
         test_buy_fill_increases_inventory();
         test_sell_fill_decreases_inventory();
         test_fills_affect_future_quotes();
+        test_trade_on_bid_increases_inventory();
+        test_trade_on_ask_decreases_inventory();
+        test_unrelated_trade_does_not_change_inventory();
 
         std::cout
             << "All market maker tests passed.\n";
