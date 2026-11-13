@@ -126,4 +126,19 @@ MarketMaker::on_trade(
     return involved;
 }
 
+void
+MarketMaker::on_events(
+    const std::vector<ExchangeEvent>& events
+)
+{
+    for (const auto& event : events)
+    {
+        if (const auto* trade =
+                std::get_if<Trade>(&event))
+        {
+            (void)on_trade(*trade);
+        }
+    }
+}
+
 }
