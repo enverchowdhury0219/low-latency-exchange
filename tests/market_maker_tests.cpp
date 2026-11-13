@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #include "exchange/market_maker.hpp"
 
@@ -209,6 +210,48 @@ void test_unrelated_trade_does_not_change_inventory()
     expect(
         maker.inventory() == 0,
         "Unrelated trade should not change inventory"
+    );
+}
+
+// testing an actual event vector and if the market maker stores the trade
+void test_event_stream_updates_inventory()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.set_active_orders(
+        1001,
+        1002
+    );
+
+    std::vector<exchange::ExchangeEvent> events;
+
+    events.push_back(
+        exchange::OrderAccepted{2000}
+    );
+
+    events.push_back(
+        exchange::Trade{
+            1001,
+            2000,
+            10095,
+            60
+        }
+    );
+
+    events.push_back(
+        exchange::TopOfBookUpdate{
+            10095,
+            40,
+            10105,
+            100
+        }
+    );
+
+    maker.on_events(events);
+
+    expect(
+        maker.inventory() == 60,
+        "Trade event should update inventory"
     );
 }
 
