@@ -1,8 +1,11 @@
 #pragma once
 
 #include <optional>
+#include <vector>
 #include "exchange/order.hpp"
 #include "exchange/trade.hpp"
+#include "exchange/event.hpp"
+
 
 namespace exchange
 {
@@ -49,6 +52,10 @@ public:
 
     [[nodiscard]] bool
     on_trade(const Trade& trade);
+
+    void on_events(
+    const std::vector<ExchangeEvent>& events
+);
 
 private:
     Price half_spread_;
