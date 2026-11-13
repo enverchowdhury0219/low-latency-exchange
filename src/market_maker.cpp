@@ -133,6 +133,8 @@ MarketMaker::on_events(
 {
     for (const auto& event : events)
     {
+        // get_if sees if this event is a Trade,
+        // if so, we get a pointer to that Trade and if not then trade == nullptr
         if (const auto* trade =
                 std::get_if<Trade>(&event))
         {
