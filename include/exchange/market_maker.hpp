@@ -46,8 +46,10 @@ public:
     inventory() const;
 
     void set_active_orders(
-        OrderId bid_order_id,
-        OrderId ask_order_id
+    OrderId bid_order_id,
+    Quantity bid_quantity,
+    OrderId ask_order_id,
+    Quantity ask_quantity
     );
 
     [[nodiscard]] bool
