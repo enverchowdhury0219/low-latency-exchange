@@ -177,4 +177,34 @@ MarketMaker::on_events(
     }
 }
 
+// this function is not const as next_order_id_ changes
+QuoteOrders
+MarketMaker::make_orders(
+    Price fair_value,
+    Quantity quantity
+)
+{
+    const Quote quote =
+        make_quote(fair_value);
+
+    const Order bid{
+        next_order_id_++,
+        quote.bid_price,
+        quantity,
+        Side::Buy
+    };
+
+    const Order ask{
+        next_order_id_++,
+        quote.ask_price,
+        quantity,
+        Side::Sell
+    };
+
+    return {
+        bid,
+        ask
+    };
+}
+
 }
