@@ -129,7 +129,9 @@ void test_trade_on_bid_increases_inventory()
 
     maker.set_active_orders(
         1001,
-        1002
+        100,
+        1002,
+        100
     );
 
     const exchange::Trade trade{
@@ -159,7 +161,9 @@ void test_trade_on_ask_decreases_inventory()
 
     maker.set_active_orders(
         1001,
-        1002
+        100,
+        1002,
+        100
     );
 
     const exchange::Trade trade{
@@ -189,7 +193,9 @@ void test_unrelated_trade_does_not_change_inventory()
 
     maker.set_active_orders(
         1001,
-        1002
+        100,
+        1002,
+        100
     );
 
     const exchange::Trade trade{
@@ -220,7 +226,9 @@ void test_event_stream_updates_inventory()
 
     maker.set_active_orders(
         1001,
-        1002
+        100,
+        1002,
+        100
     );
 
     std::vector<exchange::ExchangeEvent> events;
@@ -254,6 +262,8 @@ void test_event_stream_updates_inventory()
         "Trade event should update inventory"
     );
 }
+
+
 
 int main()
 {
