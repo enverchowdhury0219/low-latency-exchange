@@ -364,6 +364,8 @@ int main()
         test_trade_on_ask_decreases_inventory();
         test_unrelated_trade_does_not_change_inventory();
         test_event_stream_updates_inventory();
+        test_full_fill_removes_active_order();
+        test_partial_fill_keeps_order_active();
 
         std::cout
             << "All market maker tests passed.\n";
