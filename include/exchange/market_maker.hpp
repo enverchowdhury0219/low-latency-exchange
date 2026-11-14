@@ -63,7 +63,14 @@ public:
 
     void on_events(
     const std::vector<ExchangeEvent>& events
-);
+    );
+
+    [[nodiscard]] QuoteOrders
+    make_orders(
+        Price fair_value,
+        Quantity quantity
+    );
+    
 
 private:
     struct ActiveOrder
