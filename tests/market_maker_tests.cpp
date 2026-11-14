@@ -263,7 +263,92 @@ void test_event_stream_updates_inventory()
     );
 }
 
+void test_full_fill_removes_active_order()
+{
+    exchange::MarketMaker maker{5, 2};
 
+    maker.set_active_orders(
+        1001,
+        100,
+        1002,
+        100
+    );
+
+    const exchange::Trade first_trade{
+        1001,
+        2000,
+        10095,
+        100
+    };
+
+    expect(
+        maker.on_trade(first_trade),
+        "Full bid fill should be recognized"
+    );
+
+    expect(
+        maker.inventory() == 100,
+        "Inventory should increase after fill"
+    );
+
+    const exchange::Trade duplicate_trade{
+        1001,
+        3000,
+        10095,
+        50
+    };
+
+    expect(
+        !maker.on_trade(duplicate_trade),
+        "Filled bid should no longer be active"
+    );
+
+    expect(
+        maker.inventory() == 100,
+        "Inactive order must not change inventory"
+    );
+}
+
+void test_partial_fill_keeps_order_active()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.set_active_orders(
+        1001,
+        100,
+        1002,
+        100
+    );
+
+    const exchange::Trade first_trade{
+        1001,
+        2000,
+        10095,
+        40
+    };
+
+    const exchange::Trade second_trade{
+        1001,
+        2001,
+        10095,
+        60
+    };
+
+    expect(
+        maker.on_trade(first_trade),
+        "Partial fill should be recognized"
+    );
+
+    expect(
+        maker.on_trade(second_trade),
+        "Remaining quantity should still be active"
+    );
+
+    expect(
+        maker.inventory() == 100,
+        "Both fills should total 100 inventory"
+    );
+}
 
 int main()
 {
