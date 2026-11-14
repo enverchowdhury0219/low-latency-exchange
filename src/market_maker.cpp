@@ -82,11 +82,20 @@ MarketMaker::on_fill(
 void
 MarketMaker::set_active_orders(
     OrderId bid_order_id,
-    OrderId ask_order_id
+    Quantity bid_quantity,
+    OrderId ask_order_id,
+    Quantity ask_quantity
 )
 {
-    bid_order_id_ = bid_order_id;
-    ask_order_id_ = ask_order_id;
+    active_bid_ = ActiveOrder{
+        bid_order_id,
+        bid_quantity
+    };
+
+    active_ask_ = ActiveOrder{
+        ask_order_id,
+        ask_quantity
+    };
 }
 
 bool
