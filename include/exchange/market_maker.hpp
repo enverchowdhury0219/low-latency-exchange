@@ -61,10 +61,16 @@ private:
     Price half_spread_;
     Price inventory_skew_;
 
+    struct ActiveOrder
+    {
+        OrderId id;
+        Quantity remaining_quantity;
+    };
+
     std::int64_t inventory_{0};
 
-    std::optional<OrderId> bid_order_id_;
-    std::optional<OrderId> ask_order_id_;
+    std::optional<ActiveOrder> bid_order_id_;
+    std::optional<ActiveOrder> ask_order_id_;
 };
 
 }
