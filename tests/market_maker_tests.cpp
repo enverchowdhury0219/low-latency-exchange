@@ -350,6 +350,53 @@ void test_partial_fill_keeps_order_active()
     );
 }
 
+// test order generation
+void test_market_maker_creates_orders()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    const auto orders =
+        maker.make_orders(
+            10100,
+            100
+        );
+
+    expect(
+        orders.bid.price == 10095,
+        "Bid order should use quoted bid price"
+    );
+
+    expect(
+        orders.ask.price == 10105,
+        "Ask order should use quoted ask price"
+    );
+
+    expect(
+        orders.bid.quantity == 100,
+        "Bid should use requested quantity"
+    );
+
+    expect(
+        orders.ask.quantity == 100,
+        "Ask should use requested quantity"
+    );
+
+    expect(
+        orders.bid.side == exchange::Side::Buy,
+        "Bid should be a buy order"
+    );
+
+    expect(
+        orders.ask.side == exchange::Side::Sell,
+        "Ask should be a sell order"
+    );
+
+    expect(
+        orders.bid.id != orders.ask.id,
+        "Bid and ask must have unique IDs"
+    );
+}
+
 int main()
 {
     try
