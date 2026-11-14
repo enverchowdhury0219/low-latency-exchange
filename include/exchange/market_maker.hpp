@@ -86,6 +86,9 @@ private:
 
     std::optional<ActiveOrder> active_bid_;
     std::optional<ActiveOrder> active_ask_;
+
+    // we start at 1,000,000 to keep market-maker generated IDs visually separate
+    OrderId next_order_id_{1'000'000};
 };
 
 }
