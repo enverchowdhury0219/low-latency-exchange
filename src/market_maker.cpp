@@ -105,10 +105,9 @@ MarketMaker::on_trade(
 {
     bool involved = false;
 
-    // we check if its there because its optional and then extract its actual value
     if (
-        bid_order_id_.has_value() &&
-        trade.buy_order_id == *bid_order_id_
+        active_bid_.has_value() &&
+        trade.buy_order_id == active_bid_->id
     )
     {
         on_fill(
@@ -116,18 +115,44 @@ MarketMaker::on_trade(
             trade.quantity
         );
 
+        if (
+            trade.quantity >=
+            active_bid_->remaining_quantity
+        )
+        {
+            active_bid_.reset();
+        }
+        else
+        {
+            active_bid_->remaining_quantity -=
+                trade.quantity;
+        }
+
         involved = true;
     }
 
     if (
-        ask_order_id_.has_value() &&
-        trade.sell_order_id == *ask_order_id_
+        active_ask_.has_value() &&
+        trade.sell_order_id == active_ask_->id
     )
     {
         on_fill(
             Side::Sell,
             trade.quantity
         );
+
+        if (
+            trade.quantity >=
+            active_ask_->remaining_quantity
+        )
+        {
+            active_ask_.reset();
+        }
+        else
+        {
+            active_ask_->remaining_quantity -=
+                trade.quantity;
+        }
 
         involved = true;
     }
