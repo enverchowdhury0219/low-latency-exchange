@@ -16,6 +16,12 @@ struct Quote
     Price ask_price;
 };
 
+struct QuoteOrders
+{
+    Order bid;
+    Order ask;
+};
+
 class MarketMaker
 {
 public:
