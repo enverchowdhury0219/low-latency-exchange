@@ -397,6 +397,23 @@ void test_market_maker_creates_orders()
     );
 }
 
+// test that IDs keep advancing
+void test_market_maker_order_ids_advance()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    const auto first =
+        maker.make_orders(10100, 100);
+
+    const auto second =
+        maker.make_orders(10100, 100);
+
+    expect(
+        second.bid.id > first.ask.id,
+        "New quotes should receive newer order IDs"
+    );
+}
+
 int main()
 {
     try
@@ -413,6 +430,8 @@ int main()
         test_event_stream_updates_inventory();
         test_full_fill_removes_active_order();
         test_partial_fill_keeps_order_active();
+        test_market_maker_creates_orders();
+        test_market_maker_order_ids_advance();
 
         std::cout
             << "All market maker tests passed.\n";
