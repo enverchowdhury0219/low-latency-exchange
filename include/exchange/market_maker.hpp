@@ -10,6 +10,8 @@
 namespace exchange
 {
 
+class Exchange;
+
 struct Quote
 {
     Price bid_price;
@@ -67,6 +69,12 @@ public:
 
     [[nodiscard]] QuoteOrders
     make_orders(
+        Price fair_value,
+        Quantity quantity
+    );
+
+    void submit_quotes(
+        Exchange& exchange,
         Price fair_value,
         Quantity quantity
     );
