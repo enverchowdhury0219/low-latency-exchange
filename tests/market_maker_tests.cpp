@@ -545,6 +545,7 @@ int main()
         test_market_maker_creates_orders();
         test_market_maker_order_ids_advance();
         test_submit_quotes_processes_real_fills();
+        test_refresh_cancels_old_quotes();
 
         std::cout
             << "All market maker tests passed.\n";
