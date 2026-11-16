@@ -479,6 +479,7 @@ int main()
         test_partial_fill_keeps_order_active();
         test_market_maker_creates_orders();
         test_market_maker_order_ids_advance();
+        test_submit_quotes_processes_real_fills();
 
         std::cout
             << "All market maker tests passed.\n";
