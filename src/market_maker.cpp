@@ -243,4 +243,36 @@ MarketMaker::register_if_accepted(
     }
 }
 
+void
+MarketMaker::submit_quotes(
+    Exchange& exchange,
+    Price fair_value,
+    Quantity quantity
+)
+{
+    const QuoteOrders orders =
+        make_orders(fair_value, quantity);
+
+    auto bid_events =
+        exchange.submit(orders.bid);
+
+    register_if_accepted(
+        orders.bid,
+        bid_events
+    );
+
+    on_events(bid_events);
+
+    auto ask_events =
+        exchange.submit(orders.ask);
+
+    register_if_accepted(
+        orders.ask,
+        ask_events
+    );
+
+    on_events(ask_events);
+}
+
+
 }
