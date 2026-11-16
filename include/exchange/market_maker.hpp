@@ -78,6 +78,16 @@ public:
         Price fair_value,
         Quantity quantity
     );
+
+    bool cancel_active_quotes(
+        Exchange& exchange
+    );
+
+    bool refresh_quotes(
+        Exchange& exchange,
+        Price fair_value,
+        Quantity quantity
+    );
     
 
 private:
