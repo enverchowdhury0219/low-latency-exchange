@@ -274,5 +274,26 @@ MarketMaker::submit_quotes(
     on_events(ask_events);
 }
 
+bool
+MarketMaker::was_cancelled(
+    OrderId id,
+    const std::vector<ExchangeEvent>& events
+) const
+{
+    for (const auto& event : events)
+    {
+        if (const auto* cancelled =
+                std::get_if<OrderCancelled>(&event))
+        {
+            if (cancelled->order_id == id)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 
 }
