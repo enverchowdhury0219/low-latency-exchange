@@ -1,4 +1,5 @@
 #include "exchange/market_maker.hpp"
+#include "exchange/exchange.hpp"
 
 namespace exchange
 {
@@ -205,6 +206,41 @@ MarketMaker::make_orders(
         bid,
         ask
     };
+}
+
+void
+MarketMaker::register_if_accepted(
+    const Order& order,
+    const std::vector<ExchangeEvent>& events
+)
+{
+    for (const auto& event : events)
+    {
+        if (const auto* accepted =
+                std::get_if<OrderAccepted>(&event))
+        {
+            if (accepted->order_id != order.id)
+            {
+                continue;
+            }
+
+            const ActiveOrder active{
+                order.id,
+                order.quantity
+            };
+
+            if (order.side == Side::Buy)
+            {
+                active_bid_ = active;
+            }
+            else
+            {
+                active_ask_ = active;
+            }
+
+            return;
+        }
+    }
 }
 
 }
