@@ -295,5 +295,51 @@ MarketMaker::was_cancelled(
     return false;
 }
 
+bool
+MarketMaker::cancel_active_quotes(
+    Exchange& exchange
+)
+{
+    bool success = true;
+
+    if (active_bid_.has_value())
+    {
+        const OrderId id =
+            active_bid_->id;
+
+        const auto events =
+            exchange.cancel(id);
+
+        if (was_cancelled(id, events))
+        {
+            active_bid_.reset();
+        }
+        else
+        {
+            success = false;
+        }
+    }
+
+    if (active_ask_.has_value())
+    {
+        const OrderId id =
+            active_ask_->id;
+
+        const auto events =
+            exchange.cancel(id);
+
+        if (was_cancelled(id, events))
+        {
+            active_ask_.reset();
+        }
+        else
+        {
+            success = false;
+        }
+    }
+
+    return success;
+}
+
 
 }
