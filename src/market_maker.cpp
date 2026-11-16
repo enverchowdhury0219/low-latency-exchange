@@ -341,5 +341,26 @@ MarketMaker::cancel_active_quotes(
     return success;
 }
 
+bool
+MarketMaker::refresh_quotes(
+    Exchange& exchange,
+    Price fair_value,
+    Quantity quantity
+)
+{
+    if (!cancel_active_quotes(exchange))
+    {
+        return false;
+    }
+
+    submit_quotes(
+        exchange,
+        fair_value,
+        quantity
+    );
+
+    return true;
+}
+
 
 }
