@@ -86,6 +86,11 @@ private:
         OrderId id;
         Quantity remaining_quantity;
     };
+
+    void register_if_accepted(
+        const Order& order,
+        const std::vector<ExchangeEvent>& events
+    );
     
     Price half_spread_;
     Price inventory_skew_;
