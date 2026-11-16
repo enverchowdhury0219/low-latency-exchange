@@ -461,6 +461,71 @@ void test_submit_quotes_processes_real_fills()
     );
 }
 
+// test that old quotes disappear
+void test_refresh_cancels_old_quotes()
+{
+    exchange::Exchange exchange;
+    exchange::MarketMaker maker{5, 2};
+
+    maker.submit_quotes(
+        exchange,
+        10100,
+        100
+    );
+
+    // Original:
+    // bid = 10095
+    // ask = 10105
+
+    const bool refreshed =
+        maker.refresh_quotes(
+            exchange,
+            10120,
+            100
+        );
+
+    expect(
+        refreshed,
+        "Quote refresh should succeed"
+    );
+
+    // New:
+    // bid = 10115
+    // ask = 10125
+    //
+    // A BUY at 10105 should NOT trade.
+    // If the old 10105 ask still existed,
+    // it would execute.
+
+    const auto events =
+        exchange.submit({
+            1,
+            10105,
+            100,
+            exchange::Side::Buy
+        });
+
+    bool trade_found = false;
+
+    for (const auto& event : events)
+    {
+        if (std::get_if<exchange::Trade>(&event))
+        {
+            trade_found = true;
+        }
+    }
+
+    expect(
+        !trade_found,
+        "Old ask should be removed after requoting"
+    );
+
+    expect(
+        exchange.stats().cancels_accepted == 2,
+        "Refreshing should cancel old bid and ask"
+    );
+}
+
 int main()
 {
     try
