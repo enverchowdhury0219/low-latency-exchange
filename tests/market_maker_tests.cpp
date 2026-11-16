@@ -4,6 +4,8 @@
 #include <vector>
 
 #include "exchange/market_maker.hpp"
+#include "exchange/exchange.hpp"
+
 
 void expect(bool condition, const std::string& message)
 {
@@ -411,6 +413,51 @@ void test_market_maker_order_ids_advance()
     expect(
         second.bid.id > first.ask.id,
         "New quotes should receive newer order IDs"
+    );
+}
+
+void test_submit_quotes_processes_real_fills()
+{
+    exchange::Exchange exchange;
+
+    // Existing seller provides 40 shares of liquidity.
+    (void)exchange.submit({
+        1,
+        10095,
+        40,
+        exchange::Side::Sell
+    });
+
+    exchange::MarketMaker maker{5, 2};
+
+    // MM quote:
+    // bid = 10095
+    // ask = 10105
+    maker.submit_quotes(
+        exchange,
+        10100,
+        100
+    );
+
+    expect(
+        maker.inventory() == 40,
+        "Immediate bid fill should create long inventory"
+    );
+
+    // Another seller hits the remaining 60-share bid.
+    const auto events =
+        exchange.submit({
+            2,
+            10095,
+            60,
+            exchange::Side::Sell
+        });
+
+    maker.on_events(events);
+
+    expect(
+        maker.inventory() == 100,
+        "Second fill should bring inventory to 100"
     );
 }
 
