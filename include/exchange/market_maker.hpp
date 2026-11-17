@@ -88,6 +88,11 @@ public:
         Price fair_value,
         Quantity quantity
     );
+
+    [[nodiscard]] std::optional<Price>
+    fair_value_from_market(
+        const Exchange& exchange
+    ) const;
     
 
 private:
