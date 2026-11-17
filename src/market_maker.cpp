@@ -362,5 +362,25 @@ MarketMaker::refresh_quotes(
     return true;
 }
 
+std::optional<Price>
+MarketMaker::fair_value_from_market(
+    const Exchange& exchange
+) const
+{
+    const auto top =
+        exchange.top_of_book();
+
+    if (
+        !top.best_bid.has_value() ||
+        !top.best_ask.has_value()
+    )
+    {
+        return std::nullopt;
+    }
+
+    return *top.best_bid +
+           (*top.best_ask - *top.best_bid) / 2;
+}
+
 
 }
