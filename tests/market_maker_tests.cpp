@@ -560,6 +560,28 @@ void test_market_midpoint_fair_value()
     );
 }
 
+void test_fair_value_requires_two_sided_market()
+{
+    exchange::Exchange exchange;
+
+    (void)exchange.submit({
+        1,
+        10090,
+        100,
+        exchange::Side::Buy
+    });
+
+    exchange::MarketMaker maker{5, 2};
+
+    const auto fair_value =
+        maker.fair_value_from_market(exchange);
+
+    expect(
+        !fair_value.has_value(),
+        "One-sided market should not produce midpoint"
+    );
+}
+
 int main()
 {
     try
