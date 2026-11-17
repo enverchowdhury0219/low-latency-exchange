@@ -30,9 +30,10 @@ public:
     [[nodiscard]] const ExchangeStats&
     stats() const;
 
-private:
     [[nodiscard]] TopOfBookUpdate
     top_of_book() const;
+
+private:
     
     OrderBook book_;
 
