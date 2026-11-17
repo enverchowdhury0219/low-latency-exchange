@@ -526,6 +526,40 @@ void test_refresh_cancels_old_quotes()
     );
 }
 
+void test_market_midpoint_fair_value()
+{
+    exchange::Exchange exchange;
+
+    (void)exchange.submit({
+        1,
+        10090,
+        100,
+        exchange::Side::Buy
+    });
+
+    (void)exchange.submit({
+        2,
+        10110,
+        100,
+        exchange::Side::Sell
+    });
+
+    exchange::MarketMaker maker{5, 2};
+
+    const auto fair_value =
+        maker.fair_value_from_market(exchange);
+
+    expect(
+        fair_value.has_value(),
+        "Two-sided market should produce fair value"
+    );
+
+    expect(
+        *fair_value == 10100,
+        "Fair value should equal market midpoint"
+    );
+}
+
 int main()
 {
     try
