@@ -602,6 +602,8 @@ int main()
         test_market_maker_order_ids_advance();
         test_submit_quotes_processes_real_fills();
         test_refresh_cancels_old_quotes();
+        test_market_midpoint_fair_value();
+        test_fair_value_requires_two_sided_market();
 
         std::cout
             << "All market maker tests passed.\n";
