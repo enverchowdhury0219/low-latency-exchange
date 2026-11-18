@@ -383,6 +383,14 @@ MarketMaker::fair_value_from_market(
            (*top.best_ask - *top.best_bid) / 2;
 }
 
+// using formula: 
+// microprice =
+// (ask_price × bid_qty + bid_price × ask_qty)
+//------------------------------------------------
+//              bid_qty + ask_qty
+//
+// we see the weighting is opposite side price x quantity, so a heavy big quantity
+// pulls the estimate towards the ask
 std::optional<Price>
 MarketMaker::microprice_from_market(
     const Exchange& exchange
