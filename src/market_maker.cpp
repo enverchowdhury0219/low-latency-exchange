@@ -1,5 +1,6 @@
 #include "exchange/market_maker.hpp"
 #include "exchange/exchange.hpp"
+#include <cmath>
 
 namespace exchange
 {
@@ -380,6 +381,63 @@ MarketMaker::fair_value_from_market(
 
     return *top.best_bid +
            (*top.best_ask - *top.best_bid) / 2;
+}
+
+std::optional<Price>
+MarketMaker::microprice_from_market(
+    const Exchange& exchange
+) const
+{
+    const auto top =
+        exchange.top_of_book();
+
+    if (
+        !top.best_bid.has_value() ||
+        !top.best_ask.has_value() ||
+        !top.best_bid_quantity.has_value() ||
+        !top.best_ask_quantity.has_value()
+    )
+    {
+        return std::nullopt;
+    }
+
+    const long double bid_price =
+        static_cast<long double>(
+            *top.best_bid
+        );
+
+    const long double ask_price =
+        static_cast<long double>(
+            *top.best_ask
+        );
+
+    const long double bid_quantity =
+        static_cast<long double>(
+            *top.best_bid_quantity
+        );
+
+    const long double ask_quantity =
+        static_cast<long double>(
+            *top.best_ask_quantity
+        );
+
+    const long double total_quantity =
+        bid_quantity + ask_quantity;
+
+    if (total_quantity == 0)
+    {
+        return std::nullopt;
+    }
+
+    const long double microprice =
+        (
+            ask_price * bid_quantity +
+            bid_price * ask_quantity
+        ) / total_quantity;
+
+    return static_cast<Price>(
+        std::llround(microprice)
+    );
 }
 
 
