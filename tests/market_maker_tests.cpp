@@ -616,6 +616,40 @@ void test_microprice_moves_toward_heavier_bid()
     );
 }
 
+void test_balanced_microprice_equals_midpoint()
+{
+    exchange::Exchange exchange;
+
+    (void)exchange.submit({
+        1,
+        10090,
+        100,
+        exchange::Side::Buy
+    });
+
+    (void)exchange.submit({
+        2,
+        10110,
+        100,
+        exchange::Side::Sell
+    });
+
+    exchange::MarketMaker maker{5, 2};
+
+    const auto microprice =
+        maker.microprice_from_market(exchange);
+
+    expect(
+        microprice.has_value(),
+        "Balanced market should produce microprice"
+    );
+
+    expect(
+        *microprice == 10100,
+        "Balanced quantities should produce midpoint"
+    );
+}
+
 int main()
 {
     try
