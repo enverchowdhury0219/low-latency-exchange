@@ -582,6 +582,40 @@ void test_fair_value_requires_two_sided_market()
     );
 }
 
+void test_microprice_moves_toward_heavier_bid()
+{
+    exchange::Exchange exchange;
+
+    (void)exchange.submit({
+        1,
+        10090,
+        300,
+        exchange::Side::Buy
+    });
+
+    (void)exchange.submit({
+        2,
+        10110,
+        100,
+        exchange::Side::Sell
+    });
+
+    exchange::MarketMaker maker{5, 2};
+
+    const auto microprice =
+        maker.microprice_from_market(exchange);
+
+    expect(
+        microprice.has_value(),
+        "Two-sided market should produce microprice"
+    );
+
+    expect(
+        *microprice == 10105,
+        "Heavy bid should shift microprice toward ask"
+    );
+}
+
 int main()
 {
     try
