@@ -93,6 +93,11 @@ public:
     fair_value_from_market(
         const Exchange& exchange
     ) const;
+
+    [[nodiscard]] std::optional<Price>
+    microprice_from_market(
+        const Exchange& exchange
+    ) const;
     
 
 private:
