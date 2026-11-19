@@ -448,5 +448,39 @@ MarketMaker::microprice_from_market(
     );
 }
 
+bool
+MarketMaker::refresh_quotes_from_market(
+    Exchange& exchange,
+    Quantity quantity
+)
+{
+    if (!cancel_active_quotes(exchange))
+    {
+        return false;
+    }
+
+    auto fair_value =
+        microprice_from_market(exchange);
+
+    if (!fair_value.has_value())
+    {
+        fair_value =
+            fair_value_from_market(exchange);
+    }
+
+    if (!fair_value.has_value())
+    {
+        return false;
+    }
+
+    submit_quotes(
+        exchange,
+        *fair_value,
+        quantity
+    );
+
+    return true;
+}
+
 
 }
