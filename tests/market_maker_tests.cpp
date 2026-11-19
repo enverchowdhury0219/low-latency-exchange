@@ -735,6 +735,7 @@ int main()
         test_fair_value_requires_two_sided_market();
         test_microprice_moves_toward_heavier_bid();
         test_balanced_microprice_equals_midpoint();
+        test_refresh_quotes_uses_market_fair_value();
 
         std::cout
             << "All market maker tests passed.\n";
