@@ -650,6 +650,67 @@ void test_balanced_microprice_equals_midpoint()
     );
 }
 
+void test_refresh_quotes_uses_market_fair_value()
+{
+    exchange::Exchange exchange;
+
+    // External market:
+    // bid = 10090 × 300
+    // ask = 10110 × 100
+    //
+    // microprice = 10105
+
+    (void)exchange.submit({
+        1,
+        10090,
+        300,
+        exchange::Side::Buy
+    });
+
+    (void)exchange.submit({
+        2,
+        10110,
+        100,
+        exchange::Side::Sell
+    });
+
+    exchange::MarketMaker maker{5, 2};
+
+    const bool refreshed =
+        maker.refresh_quotes_from_market(
+            exchange,
+            100
+        );
+
+    expect(
+        refreshed,
+        "Market-driven refresh should succeed"
+    );
+
+    const auto top =
+        exchange.top_of_book();
+
+    expect(
+        top.best_bid.has_value(),
+        "Book should have a best bid"
+    );
+
+    expect(
+        top.best_ask.has_value(),
+        "Book should have a best ask"
+    );
+
+    expect(
+        *top.best_bid == 10100,
+        "Market maker bid should be 5 ticks below microprice"
+    );
+
+    expect(
+        *top.best_ask == 10110,
+        "Best ask should remain 10110"
+    );
+}
+
 int main()
 {
     try
