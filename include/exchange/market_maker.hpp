@@ -98,6 +98,11 @@ public:
     microprice_from_market(
         const Exchange& exchange
     ) const;
+
+    bool refresh_quotes_from_market(
+        Exchange& exchange,
+        Quantity quantity
+    );
     
 
 private:
