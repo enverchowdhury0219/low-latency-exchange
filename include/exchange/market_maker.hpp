@@ -32,7 +32,8 @@ public:
     // to incentivize trades that reduce a market's risky new position (q) back towards 0.
     MarketMaker(
         Price half_spread,
-        Price inventory_skew = 0
+        Price inventory_skew = 0,
+        std::int64_t inventory_unit = 100
     );
 
     [[nodiscard]] Quote
