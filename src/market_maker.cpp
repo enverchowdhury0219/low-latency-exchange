@@ -28,16 +28,14 @@ MarketMaker::make_quote(Price fair_value) const
 {
     Price adjusted_fair_value = fair_value;
 
-    // if long, we own too much, so shift down, so lower bid and ask
-    if (inventory_ > 0)
-    {
-        adjusted_fair_value -= inventory_skew_;
-    }
-    // if short, we do the opposite
-    else if (inventory_ < 0)
-    {
-        adjusted_fair_value += inventory_skew_;
-    }
+    const Price inventory_adjustment =
+    static_cast<Price>(
+        (inventory_ * inventory_skew_) /
+        inventory_unit_
+    );
+
+    adjusted_fair_value -=
+        inventory_adjustment;
 
     // our Quote object
     return {
