@@ -9,14 +9,15 @@ namespace exchange
 // half_spread_ is member var stored in obj (the extra _ usually names private member vars)
 MarketMaker::MarketMaker(
     Price half_spread,
-    Price inventory_skew
+    Price inventory_skew,
+    std::int64_t inventory_unit
 )
     // : here starts memver initializer list
     // so when making this MarketMaker obj, init its half_spread_ using param half_spread
     // this direct init helps to avoid later work
     : half_spread_(half_spread),
-        inventory_skew_(inventory_skew)
-
+    inventory_skew_(inventory_skew),
+    inventory_unit_(inventory_unit)
 // this is our constructor body (req even if empty), empty bc we did what we needed to in initializer list
 {
 }   

@@ -120,6 +120,7 @@ private:
     
     Price half_spread_;
     Price inventory_skew_;
+    std::int64_t inventory_unit_;
 
     std::int64_t inventory_{0};
 
@@ -130,8 +131,6 @@ private:
         OrderId id,
         const std::vector<ExchangeEvent>& events
     ) const;
-
-    std::int64_t inventory_unit_;
 
     // we start at 1,000,000 to keep market-maker generated IDs visually separate
     OrderId next_order_id_{1'000'000};
