@@ -711,6 +711,27 @@ void test_refresh_quotes_uses_market_fair_value()
     );
 }
 
+// testing magnitude-based skew
+void test_inventory_magnitude_changes_skew()
+{
+    exchange::MarketMaker maker{5, 2, 100};
+
+    maker.set_inventory(200);
+
+    const auto quote =
+        maker.make_quote(10100);
+
+    expect(
+        quote.bid_price == 10091,
+        "Long 200 inventory should lower bid by 4 ticks"
+    );
+
+    expect(
+        quote.ask_price == 10101,
+        "Long 200 inventory should lower ask by 4 ticks"
+    );
+}
+
 int main()
 {
     try
