@@ -732,6 +732,26 @@ void test_inventory_magnitude_changes_skew()
     );
 }
 
+void test_short_inventory_magnitude_changes_skew()
+{
+    exchange::MarketMaker maker{5, 2, 100};
+
+    maker.set_inventory(-200);
+
+    const auto quote =
+        maker.make_quote(10100);
+
+    expect(
+        quote.bid_price == 10099,
+        "Short 200 inventory should raise bid by 4 ticks"
+    );
+
+    expect(
+        quote.ask_price == 10109,
+        "Short 200 inventory should raise ask by 4 ticks"
+    );
+}
+
 int main()
 {
     try
