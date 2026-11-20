@@ -131,6 +131,8 @@ private:
         const std::vector<ExchangeEvent>& events
     ) const;
 
+    std::int64_t inventory_unit_;
+
     // we start at 1,000,000 to keep market-maker generated IDs visually separate
     OrderId next_order_id_{1'000'000};
 };
