@@ -777,6 +777,8 @@ int main()
         test_microprice_moves_toward_heavier_bid();
         test_balanced_microprice_equals_midpoint();
         test_refresh_quotes_uses_market_fair_value();
+        test_inventory_magnitude_changes_skew();
+        test_short_inventory_magnitude_changes_skew();
 
         std::cout
             << "All market maker tests passed.\n";
