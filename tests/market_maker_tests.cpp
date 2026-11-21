@@ -752,6 +752,40 @@ void test_short_inventory_magnitude_changes_skew()
     );
 }
 
+// tesing the long limit
+void test_position_limit_blocks_excess_bid()
+{
+    exchange::Exchange exchange;
+
+    exchange::MarketMaker maker{
+        5,      // half spread
+        2,      // inventory skew
+        100,    // inventory unit
+        200     // max inventory
+    };
+
+    maker.set_inventory(150);
+
+    maker.submit_quotes(
+        exchange,
+        10100,
+        100
+    );
+
+    const auto top =
+        exchange.top_of_book();
+
+    expect(
+        !top.best_bid.has_value(),
+        "Bid should be blocked when full fill would exceed position limit"
+    );
+
+    expect(
+        top.best_ask.has_value(),
+        "Ask should still be allowed when long"
+    );
+}
+
 int main()
 {
     try
