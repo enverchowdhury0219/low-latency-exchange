@@ -255,25 +255,31 @@ MarketMaker::submit_quotes(
     const QuoteOrders orders =
         make_orders(fair_value, quantity);
 
-    auto bid_events =
-        exchange.submit(orders.bid);
+    if (can_submit(Side::Buy, quantity))
+    {
+        auto bid_events =
+            exchange.submit(orders.bid);
 
-    register_if_accepted(
-        orders.bid,
-        bid_events
-    );
+        register_if_accepted(
+            orders.bid,
+            bid_events
+        );
 
-    on_events(bid_events);
+        on_events(bid_events);
+    }
 
-    auto ask_events =
-        exchange.submit(orders.ask);
+    if (can_submit(Side::Sell, quantity))
+    {
+        auto ask_events =
+            exchange.submit(orders.ask);
 
-    register_if_accepted(
-        orders.ask,
-        ask_events
-    );
+        register_if_accepted(
+            orders.ask,
+            ask_events
+        );
 
-    on_events(ask_events);
+        on_events(ask_events);
+    }
 }
 
 bool
