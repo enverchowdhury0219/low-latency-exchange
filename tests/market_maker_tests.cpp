@@ -846,6 +846,8 @@ int main()
         test_refresh_quotes_uses_market_fair_value();
         test_inventory_magnitude_changes_skew();
         test_short_inventory_magnitude_changes_skew();
+        test_position_limit_blocks_excess_bid();
+        test_position_limit_blocks_excess_ask();
 
         std::cout
             << "All market maker tests passed.\n";
