@@ -786,6 +786,39 @@ void test_position_limit_blocks_excess_bid()
     );
 }
 
+void test_position_limit_blocks_excess_ask()
+{
+    exchange::Exchange exchange;
+
+    exchange::MarketMaker maker{
+        5,
+        2,
+        100,
+        200
+    };
+
+    maker.set_inventory(-150);
+
+    maker.submit_quotes(
+        exchange,
+        10100,
+        100
+    );
+
+    const auto top =
+        exchange.top_of_book();
+
+    expect(
+        top.best_bid.has_value(),
+        "Bid should still be allowed when short"
+    );
+
+    expect(
+        !top.best_ask.has_value(),
+        "Ask should be blocked when full fill would exceed short limit"
+    );
+}
+
 int main()
 {
     try
