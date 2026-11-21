@@ -10,14 +10,16 @@ namespace exchange
 MarketMaker::MarketMaker(
     Price half_spread,
     Price inventory_skew,
-    std::int64_t inventory_unit
+    std::int64_t inventory_unit,
+    std::int64_t max_inventory
 )
     // : here starts memver initializer list
     // so when making this MarketMaker obj, init its half_spread_ using param half_spread
     // this direct init helps to avoid later work
     : half_spread_(half_spread),
     inventory_skew_(inventory_skew),
-    inventory_unit_(inventory_unit)
+    inventory_unit_(inventory_unit),
+    max_inventory_(max_inventory)
 // this is our constructor body (req even if empty), empty bc we did what we needed to in initializer list
 {
 }   
