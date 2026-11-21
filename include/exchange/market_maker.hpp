@@ -122,6 +122,7 @@ private:
     Price half_spread_;
     Price inventory_skew_;
     std::int64_t inventory_unit_;
+    std::int64_t max_inventory_;
 
     std::int64_t inventory_{0};
 
@@ -131,6 +132,12 @@ private:
     bool was_cancelled(
         OrderId id,
         const std::vector<ExchangeEvent>& events
+    ) const;
+
+    [[nodiscard]] bool
+    can_submit(
+        Side side,
+        Quantity quantity
     ) const;
 
     // we start at 1,000,000 to keep market-maker generated IDs visually separate
