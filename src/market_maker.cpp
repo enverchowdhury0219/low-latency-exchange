@@ -483,5 +483,24 @@ MarketMaker::refresh_quotes_from_market(
     return true;
 }
 
+bool
+MarketMaker::can_submit(
+    Side side,
+    Quantity quantity
+) const
+{
+    const auto signed_quantity =
+        static_cast<std::int64_t>(quantity);
+
+    if (side == Side::Buy)
+    {
+        return signed_quantity <=
+               max_inventory_ - inventory_;
+    }
+
+    return signed_quantity <=
+           max_inventory_ + inventory_;
+}
+
 
 }
