@@ -33,7 +33,8 @@ public:
     MarketMaker(
         Price half_spread,
         Price inventory_skew = 0,
-        std::int64_t inventory_unit = 100
+        std::int64_t inventory_unit = 100,
+        std::int64_t max_inventory = 1000
     );
 
     [[nodiscard]] Quote
