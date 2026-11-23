@@ -923,6 +923,43 @@ void test_realized_and_unrealized_pnl()
     );
 }
 
+void test_full_close_realizes_all_pnl()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.on_fill(
+        exchange::Side::Buy,
+        10095,
+        100
+    );
+
+    maker.on_fill(
+        exchange::Side::Sell,
+        10105,
+        100
+    );
+
+    expect(
+        maker.inventory() == 0,
+        "Round trip should leave inventory flat"
+    );
+
+    expect(
+        maker.average_entry_price() == 0,
+        "Flat position should have no entry price"
+    );
+
+    expect(
+        maker.realized_pnl() == 1000,
+        "Full round trip should realize spread profit"
+    );
+
+    expect(
+        maker.unrealized_pnl(10100) == 0,
+        "Flat position should have no unrealized PnL"
+    );
+}
+
 int main()
 {
     try
