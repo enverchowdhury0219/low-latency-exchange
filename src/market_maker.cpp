@@ -617,5 +617,17 @@ MarketMaker::mark_to_market_pnl(
            inventory_ * mark_price;
 }
 
+long double
+MarketMaker::average_entry_price() const
+{
+    return average_entry_price_;
+}
+
+long double
+MarketMaker::realized_pnl() const
+{
+    return realized_pnl_;
+}
+
 
 }
