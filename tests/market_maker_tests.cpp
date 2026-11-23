@@ -849,6 +849,38 @@ void test_buy_fill_updates_cash_and_pnl()
     );
 }
 
+void test_round_trip_captures_spread()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.on_fill(
+        exchange::Side::Buy,
+        10095,
+        100
+    );
+
+    maker.on_fill(
+        exchange::Side::Sell,
+        10105,
+        100
+    );
+
+    expect(
+        maker.inventory() == 0,
+        "Round trip should leave inventory flat"
+    );
+
+    expect(
+        maker.cash() == 1000,
+        "Round trip should capture 1000 in price-quantity units"
+    );
+
+    expect(
+        maker.mark_to_market_pnl(10100) == 1000,
+        "Flat position PnL should equal cash"
+    );
+}
+
 int main()
 {
     try
