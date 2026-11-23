@@ -518,5 +518,14 @@ MarketMaker::cash() const
     return cash_;
 }
 
+std::int64_t
+MarketMaker::mark_to_market_pnl(
+    Price mark_price
+) const
+{
+    return cash_ +
+           inventory_ * mark_price;
+}
+
 
 }
