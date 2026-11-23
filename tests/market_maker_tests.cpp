@@ -881,6 +881,48 @@ void test_round_trip_captures_spread()
     );
 }
 
+void test_realized_and_unrealized_pnl()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.on_fill(
+        exchange::Side::Buy,
+        10095,
+        100
+    );
+
+    maker.on_fill(
+        exchange::Side::Sell,
+        10105,
+        40
+    );
+
+    expect(
+        maker.inventory() == 60,
+        "Partial sale should leave 60 inventory"
+    );
+
+    expect(
+        maker.average_entry_price() == 10095,
+        "Remaining position should retain entry price"
+    );
+
+    expect(
+        maker.realized_pnl() == 400,
+        "Selling 40 at 10-tick profit should realize 400"
+    );
+
+    expect(
+        maker.unrealized_pnl(10100) == 300,
+        "Remaining 60 shares should have 300 unrealized profit"
+    );
+
+    expect(
+        maker.total_pnl(10100) == 700,
+        "Total PnL should equal realized plus unrealized"
+    );
+}
+
 int main()
 {
     try
