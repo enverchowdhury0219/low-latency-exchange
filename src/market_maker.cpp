@@ -512,5 +512,11 @@ MarketMaker::can_submit(
            max_inventory_ + inventory_;
 }
 
+std::int64_t
+MarketMaker::cash() const
+{
+    return cash_;
+}
+
 
 }
