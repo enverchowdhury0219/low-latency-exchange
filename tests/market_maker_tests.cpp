@@ -77,6 +77,7 @@ void test_buy_fill_increases_inventory()
 
     maker.on_fill(
         exchange::Side::Buy,
+        10095,
         100
     );
 
@@ -92,6 +93,7 @@ void test_sell_fill_decreases_inventory()
 
     maker.on_fill(
         exchange::Side::Sell,
+        10095,
         75
     );
 
@@ -108,6 +110,7 @@ void test_fills_affect_future_quotes()
 
     maker.on_fill(
         exchange::Side::Buy,
+        10095,
         100
     );
 
