@@ -54,6 +54,14 @@ public:
     );
 
     [[nodiscard]] std::int64_t
+    cash() const;
+
+    [[nodiscard]] std::int64_t
+    mark_to_market_pnl(
+        Price mark_price
+    ) const;
+
+    [[nodiscard]] std::int64_t
     inventory() const;
 
     void set_active_orders(
