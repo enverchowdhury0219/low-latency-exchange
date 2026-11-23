@@ -49,6 +49,7 @@ public:
     // as our buy/sell can increase/decrease inventory
     void on_fill(
         Side side,
+        Price price,
         Quantity quantity
     );
 
