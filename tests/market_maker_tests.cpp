@@ -822,6 +822,33 @@ void test_position_limit_blocks_excess_ask()
     );
 }
 
+// testing PnL
+void test_buy_fill_updates_cash_and_pnl()
+{
+    exchange::MarketMaker maker{5, 2};
+
+    maker.on_fill(
+        exchange::Side::Buy,
+        10095,
+        100
+    );
+
+    expect(
+        maker.inventory() == 100,
+        "Buy should create long inventory"
+    );
+
+    expect(
+        maker.cash() == -1009500,
+        "Buy should reduce cash"
+    );
+
+    expect(
+        maker.mark_to_market_pnl(10100) == 500,
+        "Long position should have 500 mark-to-market profit"
+    );
+}
+
 int main()
 {
     try
