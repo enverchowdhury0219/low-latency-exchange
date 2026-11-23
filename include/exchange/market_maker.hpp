@@ -134,6 +134,7 @@ private:
     std::int64_t max_inventory_;
 
     std::int64_t inventory_{0};
+    std::int64_t cash_{0};
 
     std::optional<ActiveOrder> active_bid_;
     std::optional<ActiveOrder> active_ask_;
