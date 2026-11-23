@@ -910,6 +910,8 @@ int main()
         test_short_inventory_magnitude_changes_skew();
         test_position_limit_blocks_excess_bid();
         test_position_limit_blocks_excess_ask();
+        test_buy_fill_updates_cash_and_pnl();
+        test_round_trip_captures_spread();
 
         std::cout
             << "All market maker tests passed.\n";
