@@ -1,6 +1,7 @@
 #include "exchange/market_maker.hpp"
 #include "exchange/exchange.hpp"
 #include <cmath>
+#include <algorithm>
 
 namespace exchange
 {
@@ -68,20 +69,107 @@ MarketMaker::on_fill(
     Quantity quantity
 )
 {
-    const auto signed_quantity =
+    const auto fill_quantity =
         static_cast<std::int64_t>(quantity);
 
+    const std::int64_t signed_fill =
+        side == Side::Buy
+            ? fill_quantity
+            : -fill_quantity;
+
+    const std::int64_t old_inventory =
+        inventory_;
+
+    const std::int64_t new_inventory =
+        old_inventory + signed_fill;
+
+    const auto absolute =
+        [](std::int64_t value)
+        {
+            return value >= 0
+                ? value
+                : -value;
+        };
+
+    const bool same_direction =
+        old_inventory == 0 ||
+        (old_inventory > 0 && signed_fill > 0) ||
+        (old_inventory < 0 && signed_fill < 0);
+
+    if (same_direction)
+    {
+        const long double old_quantity =
+            static_cast<long double>(
+                absolute(old_inventory)
+            );
+
+        const long double added_quantity =
+            static_cast<long double>(
+                absolute(signed_fill)
+            );
+
+        average_entry_price_ =
+            (
+                average_entry_price_ * old_quantity +
+                static_cast<long double>(price) *
+                    added_quantity
+            ) /
+            (old_quantity + added_quantity);
+    }
+    else
+    {
+        const std::int64_t closing_quantity =
+            std::min(
+                absolute(old_inventory),
+                absolute(signed_fill)
+            );
+
+        if (old_inventory > 0)
+        {
+            realized_pnl_ +=
+                (
+                    static_cast<long double>(price) -
+                    average_entry_price_
+                ) *
+                closing_quantity;
+        }
+        else
+        {
+            realized_pnl_ +=
+                (
+                    average_entry_price_ -
+                    static_cast<long double>(price)
+                ) *
+                closing_quantity;
+        }
+
+        if (new_inventory == 0)
+        {
+            average_entry_price_ = 0.0L;
+        }
+        else if (
+            (old_inventory > 0 && new_inventory < 0) ||
+            (old_inventory < 0 && new_inventory > 0)
+        )
+        {
+            // Fill closed the old position and opened
+            // a new position in the opposite direction.
+            average_entry_price_ =
+                static_cast<long double>(price);
+        }
+    }
+
+    inventory_ = new_inventory;
+
     const auto notional =
-        price * signed_quantity;
+        price * fill_quantity;
 
     if (side == Side::Buy)
     {
-        inventory_ += signed_quantity;
         cash_ -= notional;
     }
     else
     {
-        inventory_ -= signed_quantity;
         cash_ += notional;
     }
 }
