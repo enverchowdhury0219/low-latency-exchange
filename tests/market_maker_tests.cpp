@@ -991,6 +991,8 @@ int main()
         test_position_limit_blocks_excess_ask();
         test_buy_fill_updates_cash_and_pnl();
         test_round_trip_captures_spread();
+        test_realized_and_unrealized_pnl();
+        test_full_close_realizes_all_pnl();
 
         std::cout
             << "All market maker tests passed.\n";
