@@ -115,6 +115,21 @@ public:
         Quantity quantity
     );
     
+    [[nodiscard]] long double
+    average_entry_price() const;
+
+    [[nodiscard]] long double
+    realized_pnl() const;
+
+    [[nodiscard]] long double
+    unrealized_pnl(
+        Price mark_price
+    ) const;
+
+    [[nodiscard]] long double
+    total_pnl(
+        Price mark_price
+    ) const;
 
 private:
     struct ActiveOrder
