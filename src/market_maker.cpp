@@ -119,6 +119,7 @@ MarketMaker::on_trade(
     {
         on_fill(
             Side::Buy,
+            trade.price,
             trade.quantity
         );
 
@@ -145,6 +146,7 @@ MarketMaker::on_trade(
     {
         on_fill(
             Side::Sell,
+            trade.price,
             trade.quantity
         );
 
