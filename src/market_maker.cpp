@@ -64,21 +64,25 @@ MarketMaker::inventory() const
 void
 MarketMaker::on_fill(
     Side side,
+    Price price,
     Quantity quantity
 )
 {
-    // we convert Quantity because it is unsigned, but inventory can be negative,
-    // so we convert quantities before subtracting them
     const auto signed_quantity =
         static_cast<std::int64_t>(quantity);
+
+    const auto notional =
+        price * signed_quantity;
 
     if (side == Side::Buy)
     {
         inventory_ += signed_quantity;
+        cash_ -= notional;
     }
     else
     {
         inventory_ -= signed_quantity;
+        cash_ += notional;
     }
 }
 
