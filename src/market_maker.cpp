@@ -629,5 +629,33 @@ MarketMaker::realized_pnl() const
     return realized_pnl_;
 }
 
+long double
+MarketMaker::unrealized_pnl(
+    Price mark_price
+) const
+{
+    if (inventory_ > 0)
+    {
+        return
+            (
+                static_cast<long double>(mark_price) -
+                average_entry_price_
+            ) *
+            inventory_;
+    }
+
+    if (inventory_ < 0)
+    {
+        return
+            (
+                average_entry_price_ -
+                static_cast<long double>(mark_price)
+            ) *
+            (-inventory_);
+    }
+
+    return 0.0L;
+}
+
 
 }
