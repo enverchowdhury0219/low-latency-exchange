@@ -657,5 +657,14 @@ MarketMaker::unrealized_pnl(
     return 0.0L;
 }
 
+long double
+MarketMaker::total_pnl(
+    Price mark_price
+) const
+{
+    return realized_pnl_ +
+           unrealized_pnl(mark_price);
+}
+
 
 }
