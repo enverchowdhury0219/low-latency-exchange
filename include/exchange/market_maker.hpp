@@ -151,6 +151,9 @@ private:
     std::int64_t inventory_{0};
     std::int64_t cash_{0};
 
+    long double average_entry_price_{0.0L};
+    long double realized_pnl_{0.0L};
+
     std::optional<ActiveOrder> active_bid_;
     std::optional<ActiveOrder> active_ask_;
 
