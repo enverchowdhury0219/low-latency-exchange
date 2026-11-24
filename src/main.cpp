@@ -86,15 +86,54 @@ int main()
     // 3. Requote while long
     // --------------------------------------------------
 
-    if (!maker.refresh_quotes_from_market(
-            exchange,
-            100))
+    if (!maker.cancel_active_quotes(exchange))
     {
         std::cerr
-            << "Could not refresh quotes.\n";
+            << "Could not cancel active quotes.\n";
 
         return 1;
     }
+
+    const auto top_after_cancel =
+        exchange.top_of_book();
+
+    std::cout
+        << "\nAfter cancelling old MM quotes:\n"
+        << "  Best bid: "
+        << *top_after_cancel.best_bid
+        << " x "
+        << *top_after_cancel.best_bid_quantity
+        << '\n'
+        << "  Best ask: "
+        << *top_after_cancel.best_ask
+        << " x "
+        << *top_after_cancel.best_ask_quantity
+        << '\n';
+
+    const auto fair_value =
+        maker.microprice_from_market(exchange);
+
+    std::cout
+        << "  Microprice: "
+        << *fair_value
+        << '\n';
+
+    const auto quote =
+        maker.make_quote(*fair_value);
+
+    std::cout
+        << "  MM new bid: "
+        << quote.bid_price
+        << '\n'
+        << "  MM new ask: "
+        << quote.ask_price
+        << '\n';
+
+    maker.submit_quotes(
+        exchange,
+        *fair_value,
+        100
+    );
 
     // Because inventory is +100, the strategy's
     // quote is skewed downward.
