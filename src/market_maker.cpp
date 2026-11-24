@@ -555,11 +555,13 @@ MarketMaker::refresh_quotes_from_market(
     Quantity quantity
 )
 {
+    // FIRST remove our own quotes.
     if (!cancel_active_quotes(exchange))
     {
         return false;
     }
 
+    // THEN observe the external market.
     auto fair_value =
         microprice_from_market(exchange);
 
@@ -574,6 +576,7 @@ MarketMaker::refresh_quotes_from_market(
         return false;
     }
 
+    // THEN submit our new quote.
     submit_quotes(
         exchange,
         *fair_value,
