@@ -314,7 +314,7 @@ bool OrderBook::cancel(OrderId id)
     {
         return false;
     }
-    
+    level->second.total_quantity -= location.order->quantity;
     level -> second.orders.erase(location.order);
     order_locations_.erase(location_it);
 
