@@ -616,6 +616,44 @@ void test_replace_zero_quantity()
            "Failed replace must not modify original order");
 }
 
+void test_cancel_updates_level_quantity()
+{
+    exchange::OrderBook book;
+
+    (void)book.submit({
+        1,
+        10110,
+        100,
+        exchange::Side::Sell
+    });
+
+    (void)book.submit({
+        2,
+        10110,
+        100,
+        exchange::Side::Sell
+    });
+
+    expect(
+        book.best_ask_quantity().has_value(),
+        "Ask quantity should exist"
+    );
+
+    expect(
+        *book.best_ask_quantity() == 200,
+        "Initial ask quantity should be 200"
+    );
+
+    expect(
+        book.cancel(2),
+        "Cancel should succeed"
+    );
+
+    expect(
+        *book.best_ask_quantity() == 100,
+        "Cancel should reduce cached ask quantity"
+    );
+}
 
 // running tests to ensure they pass at all times
 int main()
