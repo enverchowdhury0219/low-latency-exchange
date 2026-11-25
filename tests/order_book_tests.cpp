@@ -676,6 +676,7 @@ int main()
         test_zero_quantity_rejected();
         test_replace_unknown_order();
         test_replace_zero_quantity();
+        test_cancel_updates_level_quantity();
 
         std::cout << "All order book tests passed.\n";
         return 0;
