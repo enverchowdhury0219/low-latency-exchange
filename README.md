@@ -1,14 +1,14 @@
 # Low-Latency Exchange & Market-Making Engine
 
-A C++20 electronic exchange and event-driven market-making simulator built to explore low-latency systems, market microstructure, matching-engine design, risk controls, and trading strategy infrastructure.
+an electronic exchange in c++ and event-driven market-making simulator built to explore low-latency systems, market microstructure, matching-engine design and more.
 
-The project implements a price-time-priority limit order book, exchange event layer, market-data interface, inventory-aware market maker, PnL accounting, automated tests, and performance benchmarks.
+this implements a price-time-priority limit order book, exchange event layer, market-data interface, inventory-aware market maker, PnL accounting, automated tests, and performance benchmarks.
 
 ---
 
 ## Overview
 
-The system models the core lifecycle of an electronic market:
+this models the core lifecycle of an electronic market:
 
 ```text
 Market Orders / Limit Orders
@@ -28,7 +28,7 @@ Inventory / Risk / PnL
        Requote
 ```
 
-The exchange handles order validation, matching, cancellation, replacement, and market-data generation.
+the exchange handles order validation, matching, cancellation, replacement, and market-data generation.
 
 The market maker observes the order book, estimates fair value, submits bid and ask quotes, reacts to fills, manages inventory risk, and tracks realized and unrealized PnL.
 
@@ -38,30 +38,30 @@ The market maker observes the order book, estimates fair value, submits bid and 
 
 ### Limit Order Book
 
-- Price-time priority matching
-- Separate bid and ask price levels
+- price-time priority matching
+- separate bid and ask price levels
 - FIFO ordering within each price level
-- Integer-based prices for exact financial comparisons
-- Partial fills
-- Multi-order and multi-level execution
-- Resting remainder handling
-- Best bid and best ask retrieval
-- Aggregate quantity at the top of book
+- integer-based prices for exact financial comparisons
+- partial fills
+- multi-order and multi-level execution
+- resting remainder handling
+- best bid and best ask retrieval
+- aggregate quantity at the top of book
 
 ### Order Management
 
-- Submit new orders
-- Cancel resting orders
-- Replace existing orders
-- Duplicate order-ID detection
-- Order validation and explicit rejection reasons
-- Direct order-location indexing for efficient cancellation
-- Stable iterators for resting orders
-- Cached aggregate quantity at each price level
+- submit new orders
+- cancel resting orders
+- replace existing orders
+- duplicate order-ID detection
+- order validation and explicit rejection reasons
+- direct order-location indexing for efficient cancellation
+- stable iterators for resting orders
+- cached aggregate quantity at each price level
 
 ### Exchange Event System
 
-The exchange emits strongly typed events using `std::variant`, including:
+the exchange we made avoids strongly typed events using `std::variant`, including:
 
 - `OrderAccepted`
 - `OrderRejected`
@@ -72,25 +72,25 @@ The exchange emits strongly typed events using `std::variant`, including:
 - `Trade`
 - `TopOfBookUpdate`
 
-This separates the internal matching engine from the external behavior observed by trading strategies.
+this separates the internal matching engine from the external behavior observed by trading strategies.
 
 ### Market Data
 
-The exchange exposes:
+the exchange exposes:
 
-- Best bid
-- Best ask
-- Best bid quantity
-- Best ask quantity
-- Top-of-book updates
+- best bid
+- best ask
+- best bid quantity
+- best ask quantity
+- top-of-book updates
 
-These values are used directly by the trading strategy.
+these values are used directly by the trading strategy.
 
 ---
 
 ## Market-Making Strategy
 
-The project includes an event-driven market maker that generates and manages its own bid and ask orders.
+project includes an event-driven market maker that generates and manages its own bid and ask orders.
 
 ### Fair Value
 
