@@ -94,7 +94,7 @@ project includes an event-driven market maker that generates and manages its own
 
 ### Fair Value
 
-Two fair-value estimators are implemented.
+2 fair-value estimators are implemented.
 
 #### Midpoint
 
@@ -104,7 +104,7 @@ midpoint = best bid + (best ask - best bid) / 2
 
 #### Microprice
 
-The microprice incorporates top-of-book quantity imbalance:
+incorporates top-of-book quantity imbalance:
 
 ```text
 microprice =
@@ -113,47 +113,47 @@ microprice =
              bid_quantity + ask_quantity
 ```
 
-A larger bid quantity shifts estimated fair value toward the ask, while a larger ask quantity shifts it toward the bid.
+a larger bid quantity shifts estimated fair value toward the ask, while a larger ask quantity shifts it toward the bid.
 
 ### Quote Generation
 
-Quotes are generated around estimated fair value:
+quotes are generated around estimated fair value:
 
 ```text
 bid = adjusted fair value - half spread
 ask = adjusted fair value + half spread
 ```
 
-The strategy generates unique order IDs and tracks active bid and ask orders.
+the strategy generates unique order IDs and tracks active bid and ask orders.
 
 ### Inventory Skew
 
-Quotes are adjusted according to the size and direction of the strategy's inventory.
+quotes are adjusted according to the size and direction of the strategy's inventory.
 
-A long position shifts the quote downward, making the strategy less aggressive when buying and more aggressive when selling.
+long position - shifts the quote downward, making the strategy less aggressive when buying and more aggressive when selling.
 
-A short position shifts the quote upward.
+short position - shifts the quote upward.
 
 ```text
 inventory adjustment =
 inventory × inventory skew / inventory unit
 ```
 
-This provides a soft mechanism for controlling inventory exposure.
+this provides a soft mechanism for controlling inventory exposure.
 
 ### Position Limits
 
-The strategy also implements a hard maximum inventory constraint.
+strategy also implements a hard maximum inventory constraint.
 
-Before submitting an order, it checks whether a complete fill could push inventory beyond the configured limit.
+before submitting an order, it checks whether a complete fill could push inventory beyond the configured limit.
 
-This creates two layers of risk control:
+this creates 2 layers of risk control:
 
 ```text
-Inventory skew
+inventory skew
 → soft pricing-based risk management
 
-Position limit
+position limit
 → hard exposure boundary
 ```
 
@@ -161,53 +161,53 @@ Position limit
 
 ## Fill and Order Lifecycle
 
-The market maker tracks active order IDs and remaining quantities.
+market maker tracks active order IDs and remaining quantities.
 
-It supports:
+supports:
 
-- Partial fills
-- Full fills
-- Removal of fully filled active orders
-- Automatic inventory updates
-- Cancel-and-requote behavior
-- Exchange-generated trade event processing
+- partial fills
+- full fills
+- removal of fully filled active orders
+- automatic inventory updates
+- cancel-and-requote behavior
+- exchange-generated trade event processing
 
-A typical strategy cycle is:
+typical strategy cycle:
 
 ```text
-Observe market
+observe market
       ↓
-Estimate fair value
+estimate fair value
       ↓
-Generate bid / ask
+generate bid / ask
       ↓
-Submit to exchange
+submit to exchange
       ↓
-Receive trade events
+receive trade events
       ↓
-Update inventory
+update inventory
       ↓
-Cancel existing quotes
+cancel existing quotes
       ↓
-Recalculate fair value
+recalculate fair value
       ↓
-Requote
+requote
 ```
 
-The strategy removes its own active quotes before recalculating market-derived fair value so that its own displayed liquidity does not distort its signal.
+the strategy removes its own active quotes before recalculating market-derived fair value so that its own displayed liquidity does not distort its signal.
 
 ---
 
 ## PnL Accounting
 
-The market maker tracks:
+market maker tracks:
 
-- Cash
-- Inventory
-- Average entry price
-- Realized PnL
-- Unrealized PnL
-- Total mark-to-market PnL
+- cash
+- inventory
+- average entry price
+- realized PnL
+- unrealized PnL
+- total mark-to-market PnL
 
 For a mark price:
 
