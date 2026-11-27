@@ -209,23 +209,23 @@ market maker tracks:
 - unrealized PnL
 - total mark-to-market PnL
 
-For a mark price:
+for a mark price:
 
 ```text
-Total PnL
+total PnL
 =
-Realized PnL + Unrealized PnL
+realized PnL + unrealized PnL
 ```
 
-The equivalent cash-and-inventory relationship is:
+equivalent cash-and-inventory relationship:
 
 ```text
-Total PnL
+total PnL
 =
-Cash + Inventory × Mark Price
+cash + inventory × mark price
 ```
 
-A completed simulated market-making round trip produces:
+a completed simulated market-making round trip produces:
 
 ```text
 Buy  100 @ 10100
@@ -241,17 +241,17 @@ PnL is expressed in price-tick × quantity units.
 
 ## Exchange Statistics
 
-The exchange records operational statistics including:
+the exchange records operational statistics including:
 
-- Orders submitted
-- Orders accepted
-- Orders rejected
-- Trades executed
-- Total traded quantity
-- Successful and rejected cancellations
-- Successful and rejected replacements
+- orders submitted
+- orders accepted
+- orders rejected
+- trades executed
+- total traded quantity
+- successful and rejected cancellations
+- successful and rejected replacements
 
-The completed simulation produces:
+completed simulation produces:
 
 ```text
 Orders submitted: 8
@@ -264,7 +264,7 @@ Cancels accepted: 1
 
 ---
 
-## Architecture
+## Project Architecture
 
 ```text
 include/exchange/
@@ -296,15 +296,15 @@ benchmarks/
 
 **OrderBook**
 
-Owns resting orders, price levels, matching logic, cancellation, replacement, and book state.
+owns resting orders, price levels, matching logic, cancellation, replacement, and book state.
 
 **Exchange**
 
-Provides the external order interface and converts order-book behavior into exchange events and market-data updates.
+provides the external order interface and converts order-book behavior into exchange events and market-data updates.
 
 **MarketMaker**
 
-Consumes market information and exchange events, estimates fair value, generates quotes, manages inventory, enforces risk limits, and tracks PnL.
+consumes market information and exchange events, estimates fair value, generates quotes, manages inventory, enforces risk limits, and tracks PnL.
 
 ---
 
@@ -316,7 +316,7 @@ The book uses:
 - `std::list` for FIFO orders at each price
 - `std::unordered_map` for direct order-ID lookup
 
-Each price level stores:
+each price level stores:
 
 ```cpp
 struct PriceLevel
@@ -326,9 +326,9 @@ struct PriceLevel
 };
 ```
 
-The cached aggregate quantity allows constant-time retrieval of displayed quantity at the best price.
+the cached aggregate quantity allows constant-time retrieval of displayed quantity at the best price.
 
-The order-location index stores the side, price, and stable list iterator for each live order, allowing direct cancellation without scanning every order in the book.
+the order-location index stores the side, price, and stable list iterator for each live order, allowing direct cancellation without scanning every order in the book.
 
 ---
 
